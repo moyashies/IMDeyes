@@ -115,8 +115,7 @@ namespace IMDeyes
             PortList = SerialPort.GetPortNames();
 
             StatusView.Text = "Controller:Disable\r\nPort:Disable";
-            InfomationViewAdd("Component initialized");
-            InfomationViewAdd("Press Button");
+            ChangeUnder(2,"Component Initialized");
         }
 
         void AsyncWrite(object sender, EventArgs e)
@@ -126,9 +125,17 @@ namespace IMDeyes
                 write = new Thread(new ThreadStart(Write_Tick));
                 write.Start();
             }
+            catch (TimeoutException)
+            {
+                if (ConnectPort.IsOpen)
+                {
+                    ChangeUnder(3,"Write Timeout");
+                    DisConnect();
+                }
+            }
             catch (Exception ex)
             {
-                InfomationViewAdd("Write Failed: " + ex.Message);
+                ChangeUnder(3, "Write Failed: " + ex.Message);
             }
         }
 
@@ -146,13 +153,13 @@ namespace IMDeyes
                 {
                     if (ConnectPort.IsOpen)
                     {
-                        InfomationViewAdd("Send Timeout");
+                        ChangeUnder(3, "Send Timeout");
                         DisConnect();
                     }
                 }
                 catch (Exception ex)
                 {
-                    InfomationViewAdd("Send error: \r\n" + ex.Message);
+                    ChangeUnder(3, "Send Failed: " + ex.Message);
                 }
                 
             }
@@ -193,27 +200,10 @@ namespace IMDeyes
             }));
         }
 
-        void InfomationViewAdd(string hoge)
-        {
-            Dispatcher.BeginInvoke((Action)(() =>
-            {
-                if ((bool)InfomationViewEnable.IsChecked)
-                {
-                    InfomationView.Items.Insert(0, hoge);
-                    if (InfomationView.Items.Count > 100)
-                    {
-                        InfomationView.Items.RemoveAt(99);
-                    }
-                    ItemCountRefresh();
-                }
-            }));
-        }
-
         void ItemCountRefresh()
         {
             DebugText.Text = SerialView.Items.Count.ToString() + "\r\n" +
-                                 ReceiveView.Items.Count.ToString() + "\r\n" +
-                                     InfomationView.Items.Count.ToString();
+                                 ReceiveView.Items.Count.ToString();
         }
 
         string Send;
@@ -514,13 +504,13 @@ namespace IMDeyes
                 }
                 catch
                 {
-                    InfomationViewAdd("Edit error\r\n" + ReceiveData);
+                    ChangeUnder(1,"Edit error\r\n" + ReceiveData);
                 }
 
             }
             else
             {
-                InfomationViewAdd("KUFC \r\n" + ReceiveData);
+                ChangeUnder(1,"KUFC \r\n" + ReceiveData);
             }
         }
 
@@ -541,7 +531,7 @@ namespace IMDeyes
                 {
                     if (ConnectPort.IsOpen)
                     {
-                        InfomationViewAdd("Receive Timeout");
+                        ChangeUnder(3,"Receive Timeout");
                         DisConnect();
                     }
                 }
@@ -549,7 +539,7 @@ namespace IMDeyes
                 {
                     Dispatcher.BeginInvoke((Action)(() =>
                     {
-                        InfomationViewAdd("Receive error: \r\n " + ex.Message);
+                        ChangeUnder(3, "Receive error: \r\n " + ex.Message);
                     }));
                 }
             }
@@ -579,14 +569,14 @@ namespace IMDeyes
                 ConnectPort.Close();
                 Dispatcher.BeginInvoke((Action)(() =>
                 {
-                    InfomationViewAdd("DisConnected");
+                    ChangeUnder(0, "DisConnected");
                     StatusView.Text = "Controller:Enable\r\nPort:Disable";
                     ConnectButton.Content = "Connect";
                 }));
             }
             catch (Exception ex)
             {
-                InfomationViewAdd("Failed:" + ex.Message);
+                ChangeUnder(3, "Failed:" + ex.Message);
             }
         }
         void Connect()
@@ -603,13 +593,13 @@ namespace IMDeyes
                     ConnectPort.Encoding = ASCIIEncoding.UTF8;
                     ConnectPort.DataReceived += new SerialDataReceivedEventHandler(ConnectPort_DataReceived);
 
-                    InfomationViewAdd("Connecting  \r\nPort:" + ConnectPort.PortName + " \r\nBaudRate:" + ConnectPort.BaudRate.ToString());
+                    ChangeUnder(0, "Connecting");
                     Dispatcher.BeginInvoke((Action)(() =>
                     {
                         ConnectButton.IsEnabled = false;
                     })); ;
                     ConnectPort.Open();
-                    InfomationViewAdd("Connection established");
+                    ChangeUnder(2, "Connection established");
 
                     Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
 
@@ -637,12 +627,12 @@ namespace IMDeyes
                     {
                         ConnectButton.IsEnabled = true;
                     }));
-                    InfomationViewAdd("Failed:" + ex.Message);
+                    ChangeUnder(2,"Failed:" + ex.Message);
                 }
             }
             else
             {
-                InfomationViewAdd("Port does not exist");
+                ChangeUnder(2,"Port does not exist");
             }
         }
 
@@ -650,6 +640,36 @@ namespace IMDeyes
         {
             Environment.Exit(0);
         }
+
+        void ChangeUnder(int color,string message)
+        {
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                switch (color)
+                {
+                    case(0):
+                        Grid_Under.Background = Brushes.DarkViolet;
+                        WindowBoader.BorderBrush = Brushes.DarkViolet;
+                        break;
+                    case (1):
+                        Grid_Under.Background = Brushes.DarkOrange;
+                        WindowBoader.BorderBrush = Brushes.DarkOrange;
+                        break;
+                    case (2):
+                        Grid_Under.Background = Brushes.DodgerBlue;
+                        WindowBoader.BorderBrush = Brushes.DodgerBlue;
+                        break;
+                    case (3):
+                        Grid_Under.Background = Brushes.DarkRed;
+                        WindowBoader.BorderBrush = Brushes.DarkRed;
+                        break;
+                    default:
+                        break;
+                }
+                Label_Under.Text = message;
+            }));
+        }
+
 
     }
 }
