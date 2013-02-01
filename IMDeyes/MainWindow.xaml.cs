@@ -114,7 +114,6 @@ namespace IMDeyes
 
             PortList = SerialPort.GetPortNames();
 
-            StatusView.Text = "Controller:Disable\r\nPort:Disable";
             ChangeUnder(2,"Component Initialized");
         }
 
@@ -179,7 +178,6 @@ namespace IMDeyes
                     {
                         ReceiveView.Items.RemoveAt(499);
                     }
-                    ItemCountRefresh();
                 }
             }));
         }
@@ -195,16 +193,10 @@ namespace IMDeyes
                     {
                         SerialView.Items.RemoveAt(299);
                     }
-                    ItemCountRefresh();
                 }
             }));
         }
 
-        void ItemCountRefresh()
-        {
-            DebugText.Text = SerialView.Items.Count.ToString() + "\r\n" +
-                                 ReceiveView.Items.Count.ToString();
-        }
 
         string Send;
 
@@ -504,13 +496,13 @@ namespace IMDeyes
                 }
                 catch
                 {
-                    ChangeUnder(1,"Edit error\r\n" + ReceiveData);
+                    ChangeUnder(3,"Edit error\r\n" + ReceiveData);
                 }
 
             }
             else
             {
-                ChangeUnder(1,"KUFC \r\n" + ReceiveData);
+                ChangeUnder(3,"KUFC \r\n" + ReceiveData);
             }
         }
 
@@ -569,8 +561,7 @@ namespace IMDeyes
                 ConnectPort.Close();
                 Dispatcher.BeginInvoke((Action)(() =>
                 {
-                    ChangeUnder(0, "DisConnected");
-                    StatusView.Text = "Controller:Enable\r\nPort:Disable";
+                    ChangeUnder(1, "DisConnected");
                     ConnectButton.Content = "Connect";
                 }));
             }
@@ -616,7 +607,6 @@ namespace IMDeyes
 
                     Dispatcher.BeginInvoke((Action)(() =>
                     {
-                        StatusView.Text = "Controller:Enable\r\nPort:" + ConnectPort.PortName + "\r\nBaudRate:9600";
                         ConnectButton.IsEnabled = true;
                         ConnectButton.Content = "DisConnect";
                     }));
@@ -627,12 +617,12 @@ namespace IMDeyes
                     {
                         ConnectButton.IsEnabled = true;
                     }));
-                    ChangeUnder(2,"Failed:" + ex.Message);
+                    ChangeUnder(3,"Failed:" + ex.Message);
                 }
             }
             else
             {
-                ChangeUnder(2,"Port does not exist");
+                ChangeUnder(3,"Port does not exist");
             }
         }
 
@@ -649,19 +639,19 @@ namespace IMDeyes
                 {
                     case(0):
                         Grid_Under.Background = Brushes.DarkViolet;
-                        WindowBoader.BorderBrush = Brushes.DarkViolet;
+                        WindowBoader.BorderBrush = Brushes.DarkViolet;  ///Thread
                         break;
                     case (1):
                         Grid_Under.Background = Brushes.DarkOrange;
-                        WindowBoader.BorderBrush = Brushes.DarkOrange;
+                        WindowBoader.BorderBrush = Brushes.DarkOrange;    //Conencting
                         break;
                     case (2):
                         Grid_Under.Background = Brushes.DodgerBlue;
-                        WindowBoader.BorderBrush = Brushes.DodgerBlue;
+                        WindowBoader.BorderBrush = Brushes.DodgerBlue;    //DisConnecting
                         break;
                     case (3):
                         Grid_Under.Background = Brushes.DarkRed;
-                        WindowBoader.BorderBrush = Brushes.DarkRed;
+                        WindowBoader.BorderBrush = Brushes.DarkRed;      //Error
                         break;
                     default:
                         break;
