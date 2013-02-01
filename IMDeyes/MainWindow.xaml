@@ -1,0 +1,152 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="IMDeyes.MainWindow"
+        Title="IMDeyes" Height="700" Width="1100" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Background="White" Foreground="White">
+    <Grid>
+    	<Grid.RowDefinitions>
+    		<RowDefinition Height="0.425*"/>
+    		<RowDefinition Height="0.207*"/>
+    		<RowDefinition Height="0.173*"/>
+    		<RowDefinition Height="0.195*"/>
+    	</Grid.RowDefinitions>
+    	<Grid.ColumnDefinitions>
+    		<ColumnDefinition Width="0.092*"/>
+    		<ColumnDefinition Width="0.281*"/>
+    		<ColumnDefinition Width="0.219*"/>
+    		<ColumnDefinition Width="0.135*"/>
+    		<ColumnDefinition Width="0.273*"/>
+    	</Grid.ColumnDefinitions>
+    	<Grid Margin="0" Grid.ColumnSpan="2">
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition Width="0.25*"/>
+    			<ColumnDefinition Width="0.25*"/>
+    			<ColumnDefinition Width="0.125*"/>
+    			<ColumnDefinition Width="0.125*"/>
+    			<ColumnDefinition Width="0.179*"/>
+    			<ColumnDefinition Width="0.071*"/>
+    		</Grid.ColumnDefinitions>
+    		<Grid.RowDefinitions>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+    		<ProgressBar Margin="4" x:Name="T" Value="50" Foreground="#FFFBF351" BorderBrush="#00000000" Background="#7FA1A1A1" Orientation="Vertical" Grid.RowSpan="8" Grid.Column="5" BorderThickness="0" />
+    		<ProgressBar Margin="4" x:Name="LSX" Value="50" Foreground="#FFFBF351" BorderBrush="#00000000" Background="#7FA1A1A1" Grid.ColumnSpan="5" Grid.Row="5" BorderThickness="0" />
+    		<ProgressBar Margin="4" x:Name="LSY" Value="50" Foreground="#FFFBF351" BorderBrush="#00000000" Background="#7FA1A1A1" Grid.ColumnSpan="5" Grid.Row="4" BorderThickness="0" />
+    		<ProgressBar Margin="4" x:Name="RSX" Value="50" Foreground="#FFFBF351" BorderBrush="#00000000" Background="#7FA1A1A1" Grid.ColumnSpan="5" Grid.Row="3" BorderThickness="0" />
+    		<ProgressBar Margin="4" x:Name="RSY" Value="50" Foreground="#FFFBF351" BorderBrush="#00000000" Background="#7FA1A1A1" Grid.ColumnSpan="5" Grid.Row="2" BorderThickness="0" />
+    		<Button Content="Connect" Margin="4" x:Name="ConnectButton" Background="#7FA1A1A1" BorderBrush="#00000000" Grid.ColumnSpan="5" BorderThickness="0" Foreground="#FF474747" />
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="YS" Text="Y" TextAlignment="Center" Grid.Row="6" Foreground="#FF474747" Grid.ColumnSpan="2" Grid.Column="3" />
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4,4,4,4.001" x:Name="AS" Text="RB" TextAlignment="Center" Grid.Row="1" Foreground="#FF474747" Grid.ColumnSpan="5" />
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="LBS" TextAlignment="Center" Grid.Row="6" Foreground="#FF474747" ><Run Language="ja-jp" Text="LB"/></TextBlock>
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="UpS" TextAlignment="Center" Grid.Row="6" Foreground="#FF474747" Grid.Column="1" Grid.ColumnSpan="2" ><Run Language="ja-jp" Text="▲"/></TextBlock>
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="DownS" TextAlignment="Center" Grid.Row="7" Foreground="#FF474747" Grid.Column="1" Grid.ColumnSpan="2" ><Run Language="ja-jp" Text="▼"/></TextBlock>
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="StartS" TextAlignment="Center" Grid.Row="7" Foreground="#FF474747" ><Run Language="ja-jp" Text="START"/></TextBlock>
+    		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="ShiitakeS" TextAlignment="Center" Grid.Row="7" Foreground="#FF474747" Grid.Column="3" Grid.ColumnSpan="2" ><Run Language="ja-jp" Text="SHIITAKE"/></TextBlock>
+    	</Grid>
+        <Grid Margin="0" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1" Grid.RowSpan="2">
+    		<Grid.RowDefinitions>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    		</Grid.ColumnDefinitions>
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FFFF5966" Margin="4" x:Name="GYX" Background="#7FA1A1A1" Maximum="128" BorderThickness="0" Minimum="-128" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FFFF5966" Margin="4" x:Name="GYY" Background="#7FA1A1A1" Maximum="128" Grid.Row="1" BorderThickness="0" Minimum="-128" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FFFF5966" Margin="4" x:Name="GYZ" Background="#7FA1A1A1" Maximum="128" Grid.Row="2" BorderThickness="0" Minimum="-128" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="AGX" Background="#7FA1A1A1" Maximum="180" Grid.Row="7" BorderThickness="0" Minimum="-180" Grid.Column="1" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="AGY" Background="#7FA1A1A1" Maximum="180" Grid.Row="8" BorderThickness="0" Minimum="-180" Grid.Column="1" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="AGZ" Background="#7FA1A1A1" Maximum="180" Grid.Row="9" BorderThickness="0" Minimum="-180" Grid.Column="1" />
+            <d3:ChartPlotter Margin="4" Grid.RowSpan="7" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" Grid.Row="3" x:Name="AcclGraph" Background="#7FA1A1A1" IsManipulationEnabled="False" BorderBrush="#FF49C8F0" Foreground="#FF474747" />
+            <d3:ChartPlotter Margin="4" Grid.RowSpan="7" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="GyroGraph" Background="#7FA1A1A1" IsManipulationEnabled="False" Grid.Column="1" BorderBrush="#FFFF5966" Foreground="#FF474747" />
+            <TextBlock x:Name="GyroX_Value" Margin="6,0,0,0" TextWrapping="Wrap" Foreground="#FF004AFF" HorizontalAlignment="Left" Width="28.444" VerticalAlignment="Center" TextAlignment="Center"/>
+            <TextBlock x:Name="GyroY_Value" Margin="6,0,0,0" TextWrapping="Wrap" Foreground="#FF004AFF" HorizontalAlignment="Left" Width="28.444" Grid.Row="1" d:LayoutOverrides="Height" VerticalAlignment="Center" TextAlignment="Center"><Run Language="ja-jp" Text=""/></TextBlock>
+            <TextBlock x:Name="GyroZ_Value" Margin="6,0,0,0" TextWrapping="Wrap" Foreground="#FF004AFF" HorizontalAlignment="Left" Width="28.444" Grid.Row="2" d:LayoutOverrides="Height" VerticalAlignment="Center" TextAlignment="Center"><Run Language="ja-jp" Text=""/></TextBlock>
+            <TextBlock x:Name="AngleX_Value" Margin="6,0,0,0" TextWrapping="Wrap" Foreground="#FF004AFF" HorizontalAlignment="Left" Width="28.444" Grid.Row="7" TextAlignment="Center" Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Center"><Run Language="ja-jp" Text=""/></TextBlock>
+            <TextBlock x:Name="AngleY_Value" Margin="6,0,0,0" TextWrapping="Wrap" Foreground="#FF004AFF" HorizontalAlignment="Left" Width="28.444" Grid.Row="8" TextAlignment="Center" Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Center"><Run Language="ja-jp" Text=""/></TextBlock>
+            <TextBlock x:Name="AngleZ_Value" Margin="6,0,0,0" TextWrapping="Wrap" Foreground="#FF004AFF" HorizontalAlignment="Left" Width="28.444" Grid.Row="9" TextAlignment="Center" Grid.Column="1" d:LayoutOverrides="Height" VerticalAlignment="Center"><Run Language="ja-jp" Text=""/></TextBlock>
+        </Grid>
+    	<ListBox x:Name="SerialView"
+    	Margin="4" Grid.Column="4" Grid.Row="2" Background="#7FA1A1A1" BorderThickness="0" Grid.RowSpan="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" Foreground="#FF474747" />
+    	<Grid Margin="0" Grid.Row="1" Grid.RowSpan="3">
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    		</Grid.ColumnDefinitions>
+    		<ProgressBar Margin="4" x:Name="ACX" BorderBrush="#00000000" Foreground="#FF49C8F0" Background="#7FA1A1A1" Maximum="256" BorderThickness="0" Orientation="Vertical" Minimum="-256" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FF49C8F0" Margin="4" x:Name="ACY" Background="#7FA1A1A1" RenderTransformOrigin="0.5,0.5" Maximum="256" BorderThickness="0" Grid.Column="1" Orientation="Vertical" Minimum="-256" />
+    		<ProgressBar BorderBrush="#00000000" Foreground="#FF49C8F0" Margin="4" x:Name="ACZ" Background="#7FA1A1A1" Maximum="256" BorderThickness="0" Grid.Column="2" Orientation="Vertical" Minimum="-256" />
+    		<TextBlock x:Name="AcclX_Value" Height="16.5" Margin="0,0,0,4" TextWrapping="Wrap" Foreground="#FF004AFF" TextAlignment="Center" VerticalAlignment="Bottom"><Run Language="ja-jp" Text=""/></TextBlock>
+    		<TextBlock x:Name="AcclY_Value" Height="16.5" Margin="0,0,0,4" TextWrapping="Wrap" Foreground="#FF004AFF" TextAlignment="Center" VerticalAlignment="Bottom" Grid.Column="1"><Run Language="ja-jp" Text=""/></TextBlock>
+    		<TextBlock x:Name="AcclZ_Value" Height="16.5" Margin="0,0,0,4" TextWrapping="Wrap" Foreground="#FF004AFF" TextAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2"><Run Language="ja-jp" Text=""/></TextBlock>
+    	</Grid>
+    	<Grid Grid.ColumnSpan="2" Grid.Column="1" Margin="0,0,80.064,0" Grid.Row="3">
+    		<d3:ChartPlotter Margin="4" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="AngleGraph" Background="#7FA1A1A1" IsManipulationEnabled="False" BorderBrush="#FF0BDE69" Foreground="#FF474747" />
+    	</Grid>
+    	<ListBox x:Name="ReceiveView"
+    		Margin="4" Grid.Column="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" IsEnabled="True" Foreground="#FF474747" />
+    	<Grid Margin="-76.729,4,4,4" ToolTip="4" Background="#7FA1A1A1" Grid.Column="3" Grid.Row="3"/>
+    	<ListBox x:Name="InfomationView"
+    		Margin="4" Grid.Column="2" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" IsHitTestVisible="True" SelectionMode="Extended" Grid.ColumnSpan="2" Foreground="#FF474747" />
+    	<Grid Grid.Column="3" Margin="-76.729,0,0.665,4" Grid.Row="3" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Bottom">
+    		<Grid.RowDefinitions>
+    			<RowDefinition Height="21.667"/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+    		<CheckBox x:Name="SerialViewEnable" Content="SerialView:" Margin="4,2,2,2" Foreground="#FF474747" IsChecked="True"/>
+    		<CheckBox x:Name="ReceiveViewEnable" Content="ReceiveView:" Margin="4,2,2,2" Grid.Row="1" Foreground="#FF474747" IsChecked="True"/>
+    		<CheckBox x:Name="InfomationViewEnable" Content="InfomationView:" Margin="4,2,2,2" Grid.Row="2" Foreground="#FF474747" IsChecked="True"/>
+    		<TextBlock x:Name="DebugText" Margin="63.49,0,44.917,0" TextWrapping="Wrap" Foreground="#FF474747" TextAlignment="Right" LineHeight="22.667" Grid.RowSpan="3"><Run Language="ja-jp" Text="0"/><LineBreak/><Run Language="ja-jp" Text="12"/><LineBreak/><Run Language="ja-jp" Text="2"/></TextBlock>
+    		<TextBlock Margin="0" TextWrapping="Wrap" Foreground="#FF474747" HorizontalAlignment="Right" Width="42" LineHeight="22.667" Grid.RowSpan="3"><Run Language="ja-jp" Text="(300)"/><LineBreak/><Run Language="ja-jp" Text="(500)"/><LineBreak/><Run Language="ja-jp" Text="(100)"/></TextBlock>
+    	</Grid>
+    	<Grid Grid.Column="3" Grid.Row="1" Margin="0" Grid.RowSpan="2">
+    		<Grid.RowDefinitions>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    		</Grid.ColumnDefinitions>
+    		<ProgressBar Margin="4" Value="19000" Orientation="Vertical" Foreground="#FFE5AAEF" BorderThickness="0" Name="MF" Maximum="22000" Minimum="20000" Grid.Column="1" Grid.ColumnSpan="2" Background="#7FA1A1A1" />
+    		<ProgressBar Margin="4" Value="19000" Orientation="Vertical" Grid.Column="3" Foreground="#FFE5AAEF" BorderThickness="0" Name="MR" Maximum="22000" Minimum="20000" Grid.RowSpan="2" Background="#7FA1A1A1" />
+    		<ProgressBar Margin="4" Value="19000" Orientation="Vertical" Foreground="#FFE5AAEF" BorderThickness="0" Name="ML" Maximum="22000" Minimum="20000" Background="#7FA1A1A1" Grid.RowSpan="2" />
+    		<ProgressBar Margin="4" Value="19000" Orientation="Vertical" Grid.Column="1" Grid.Row="1" Foreground="#FFE5AAEF" BorderThickness="0" Name="MB" Maximum="22000" Minimum="20000" Grid.ColumnSpan="2" Background="#7FA1A1A1" />
+    		<ProgressBar Margin="4,4,6,4" Value="20" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="2" x:Name="AcceKp" Background="#7FA1A1A1" Grid.RowSpan="2" Grid.Row="2" Minimum="0" Width="26.9225" BorderBrush="#FF34FFE8" Maximum="200" />
+    		<ProgressBar Margin="4" Value="12" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="0" x:Name="AcceKd" Background="#7FA1A1A1" Grid.RowSpan="2" Grid.Row="2" Grid.Column="1" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" />
+    		<ProgressBar Margin="4" Value="7" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="0" x:Name="GyroKp" Background="#7FA1A1A1" Grid.RowSpan="2" Grid.Row="2" Grid.Column="2" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" />
+    		<ProgressBar Margin="4" Value="10" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="0" x:Name="GyroKd" Background="#7FA1A1A1" Grid.RowSpan="2" Grid.Row="2" Grid.Column="3" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" />
+    		<TextBlock x:Name="AcceKp_Value" Height="16.5" Margin="0,4" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474747" TextAlignment="Center"><Run Language="ja-jp" Text="20"/></TextBlock>
+    		<TextBlock x:Name="AcceKd_Value" Height="16.5" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474747" Grid.Column="1" Margin="0,0,0,4" TextAlignment="Center"><Run Language="ja-jp" Text="12"/></TextBlock>
+    		<TextBlock x:Name="GyroKp_Value" Height="16.5" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474747" Grid.Column="2" Margin="0,0,0,4" TextAlignment="Center" Text="7"></TextBlock>
+    		<TextBlock x:Name="GyroKd_Value" Height="16.5" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474747" Grid.Column="3" Margin="0,0,0,4" TextAlignment="Center" Text="10"></TextBlock>
+    		<TextBlock x:Name="MotoF_Value" Height="16.5" Margin="4" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474747" TextAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2" Text="18000"/>
+    		<TextBlock x:Name="MotoB_Value" Height="16.5" Margin="4,0,4,4" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="#FF474747" TextAlignment="Center" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Text="18000"/>
+    		<TextBlock x:Name="MotoR_Value" Height="16.5" Margin="4,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF474747" TextAlignment="Center" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Text="18000"/>
+    		<TextBlock x:Name="MotoL_Value" Height="16.5" Margin="4,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="#FF474747" TextAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Text="18000"/>
+    		</Grid>
+    	<TextBlock x:Name="SelectLabel" Grid.Column="3" Height="15.655" Margin="48.852,8,53.338,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="#FF474747"><Run Language="ja-jp" Text="AcceKp"/></TextBlock>
+    	<d3:ChartPlotter Margin="4" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="MotoGraph" Background="#7FA1A1A1" IsManipulationEnabled="False" Grid.Column="4" Grid.Row="1" Visible="-1000,-1000,2000,2000" BorderBrush="#FFE5AAEF" Foreground="#FF474747" />
+    	<TextBlock x:Name="StatusView" Margin="-70.38,8,35.849,0" TextWrapping="Wrap" Foreground="#FF474747" Height="48" VerticalAlignment="Top" Grid.Column="3" Grid.Row="3"><Run Language="ja-jp" Text="Controller:Disable"/><LineBreak/><Run Language="ja-jp" Text="Port:Disable"/><LineBreak/><Run Language="ja-jp" Text="BaudRate:9600"/></TextBlock>
+    </Grid>
+</Window>
+
