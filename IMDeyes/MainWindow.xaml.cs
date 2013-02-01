@@ -36,9 +36,9 @@ namespace IMDeyes
         SerialPort ConnectPort;
         bool IsPortAvailable = true;
         string[] PortList;
-        int LeftStick_X, LeftStick_Y, RightStick_X, RightStick_Y, TT;
+        int LeftStick_X, LeftStick_Y, RightStick_X, RightStick_Y, Trigger;
         bool Button_A, Button_B, Button_X, Button_Y,
-            Button_Shiitake, Button_LB, DPad_L, DPad_D, DPad_U, DPad_R;
+            Button_Start, Button_LB, DPad_L, DPad_D, DPad_U, DPad_R;
         GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
         StreamWriter writer;
 
@@ -51,63 +51,56 @@ namespace IMDeyes
         int Frame = 0;
 
         private ObservableDataSource<System.Windows.Point>
-            ACLX, ACLY, ACLZ, GYRX, GYRY, GYRZ, ANGX, ANGY, ANGZ, MOTOFRLB;
+            Point_Accel_X, Point_Accel_Y, Point_Accel_Z, Point_Gyro_X, Point_Gyro_Y, Point_Gyro_Z, Point_Angle_X, Point_Angle_Y;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            this.MouseLeftButtonDown += (sender, e) => this.DragMove();
+
             ConnectPort = new SerialPort();
 
             Moyashi = new string[13];
 
-            ACLX = new ObservableDataSource<System.Windows.Point>();
-            ACLX.SetXYMapping(point => point);
-            AcclGraph.AddLineGraph(ACLX, Colors.Blue, 1.0);
-            ACLY = new ObservableDataSource<System.Windows.Point>();
-            ACLY.SetXYMapping(point => point);
-            AcclGraph.AddLineGraph(ACLY, Colors.Green, 1.0);
-            ACLZ = new ObservableDataSource<System.Windows.Point>();
-            ACLZ.SetXYMapping(point => point);
-            AcclGraph.AddLineGraph(ACLZ, Colors.Red, 1.0);
-            AcclGraph.Legend.Remove();
+            Point_Accel_X = new ObservableDataSource<System.Windows.Point>();
+            Point_Accel_X.SetXYMapping(point => point);
+            Plotter_Accel.AddLineGraph(Point_Accel_X, Colors.Blue, 1.0);
+            Point_Accel_Y = new ObservableDataSource<System.Windows.Point>();
+            Point_Accel_Y.SetXYMapping(point => point);
+            Plotter_Accel.AddLineGraph(Point_Accel_Y, Colors.Green, 1.0);
+            Point_Accel_Z = new ObservableDataSource<System.Windows.Point>();
+            Point_Accel_Z.SetXYMapping(point => point);
+            Plotter_Accel.AddLineGraph(Point_Accel_Z, Colors.Red, 1.0);
+            Plotter_Accel.Legend.Remove();
 
-            GYRX = new ObservableDataSource<System.Windows.Point>();
-            GYRX.SetXYMapping(point => point);
-            GyroGraph.AddLineGraph(GYRX, Colors.Blue, 1.0);
-            GYRY = new ObservableDataSource<System.Windows.Point>();
-            GYRY.SetXYMapping(point => point);
-            GyroGraph.AddLineGraph(GYRY, Colors.Green, 1.0);
-            GYRZ = new ObservableDataSource<System.Windows.Point>();
-            GYRZ.SetXYMapping(point => point);
-            GyroGraph.AddLineGraph(GYRZ, Colors.Red, 1.0);
-            GyroGraph.Legend.Remove();
+            Point_Gyro_X = new ObservableDataSource<System.Windows.Point>();
+            Point_Gyro_X.SetXYMapping(point => point);
+            Plotter_Gyro.AddLineGraph(Point_Gyro_X, Colors.Blue, 1.0);
+            Point_Gyro_Y = new ObservableDataSource<System.Windows.Point>();
+            Point_Gyro_Y.SetXYMapping(point => point);
+            Plotter_Gyro.AddLineGraph(Point_Gyro_Y, Colors.Green, 1.0);
+            Point_Gyro_Z = new ObservableDataSource<System.Windows.Point>();
+            Point_Gyro_Z.SetXYMapping(point => point);
+            Plotter_Gyro.AddLineGraph(Point_Gyro_Z, Colors.Red, 1.0);
+            Plotter_Gyro.Legend.Remove();
 
-            ANGX = new ObservableDataSource<System.Windows.Point>();
-            ANGX.SetXYMapping(point => point);
-            AngleGraph.AddLineGraph(ANGX, Colors.Blue, 1.0);
-            ANGY = new ObservableDataSource<System.Windows.Point>();
-            ANGY.SetXYMapping(point => point);
-            AngleGraph.AddLineGraph(ANGY, Colors.Green, 1.0);
-            ANGZ = new ObservableDataSource<System.Windows.Point>();
-            ANGZ.SetXYMapping(point => point);
-            AngleGraph.AddLineGraph(ANGZ, Colors.Red, 1.0);
-            AngleGraph.Legend.Remove();
+            Point_Angle_X = new ObservableDataSource<System.Windows.Point>();
+            Point_Angle_X.SetXYMapping(point => point);
+            Plotter_Angle.AddLineGraph(Point_Angle_X, Colors.Blue, 1.0);
+            Point_Angle_Y = new ObservableDataSource<System.Windows.Point>();
+            Point_Angle_Y.SetXYMapping(point => point);
+            Plotter_Angle.AddLineGraph(Point_Angle_Y, Colors.Green, 1.0);
+            Plotter_Angle.Legend.Remove();
 
-
-            MOTOFRLB = new ObservableDataSource<System.Windows.Point>();
-            MOTOFRLB.SetXYMapping(point => point);
-            MotoGraph.AddLineGraph(MOTOFRLB, Colors.Purple, 1.0);
-            MotoGraph.Legend.Remove();
-
-            AcceKp.Value = 4.0 / 4 * 10;
-            AcceKd.Value = 2.0 / 4 * 10;
-            GyroKp.Value = 12;
-            GyroKd.Value = 6.0 / 4 * 10;
-            AcceKp_Value.Text = AcceKp.Value.ToString();
-            AcceKd_Value.Text = AcceKd.Value.ToString();
-            GyroKp_Value.Text = GyroKp.Value.ToString();
-            GyroKd_Value.Text = GyroKd.Value.ToString();
+            Bar_AcceKp.Value = 4.0 / 4 * 10;
+            Bar_AcceKd.Value = 2.0 / 4 * 10;
+            Bar_GyroKp.Value = 12;
+            Bar_GyroKd.Value = 6.0 / 4 * 10;
+            Label_AcceKp.Text = Bar_AcceKp.Value.ToString();
+            Label_AcceKd.Text = Bar_AcceKd.Value.ToString();
+            Label_GyroKp.Text = Bar_GyroKp.Value.ToString();
+            Label_GyroKd.Text = Bar_GyroKd.Value.ToString();
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 30;
@@ -232,12 +225,12 @@ namespace IMDeyes
             LeftStick_Y = (int)((gamePadState.ThumbSticks.Left.Y + 1) * 127) + 1;
             RightStick_X = (int)((gamePadState.ThumbSticks.Right.X + 1) * 127) + 1;
             RightStick_Y = (int)((gamePadState.ThumbSticks.Right.Y + 1) * 127) + 1;
-            TT = 255 - (int)((-gamePadState.Triggers.Left + gamePadState.Triggers.Right + 1) * 127);
-            LSX.Value = (float)LeftStick_X / 255 * 100;
-            LSY.Value = (float)LeftStick_Y / 255 * 100;
-            RSX.Value = (float)RightStick_X / 255 * 100;
-            RSY.Value = (float)RightStick_Y / 255 * 100;
-            T.Value = (float)TT / 255 * 100;
+            Trigger = 255 - (int)((-gamePadState.Triggers.Left + gamePadState.Triggers.Right + 1) * 127);
+            Bar_LeftStick_X.Value = (float)LeftStick_X / 255 * 100;
+            Bar_LeftStick_Y.Value = (float)LeftStick_Y / 255 * 100;
+            Bar_RightStick_X.Value = (float)RightStick_X / 255 * 100;
+            Bar_RightStick_Y.Value = (float)RightStick_Y / 255 * 100;
+            Bar_Trigger.Value = (float)Trigger / 255 * 100;
 
             int DPadRange = 1;
 
@@ -251,7 +244,7 @@ namespace IMDeyes
 
             }
 
-            if (!Button_Shiitake && this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
+            if (!Button_Start && this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
                 connect = new Thread(new ThreadStart(TryToConnectAsync));
                 connect.Start();
@@ -259,62 +252,56 @@ namespace IMDeyes
 
             if (this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                StartS.Background = LSX.Foreground;
+                Sign_Button_Start.Background = Bar_LeftStick_X.Foreground;
             }
             else
             {
-                StartS.Background = LSX.Background;
+                Sign_Button_Start.Background = Bar_LeftStick_X.Background;
             }
+
             if (this.gamePadState.DPad.Up == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                UpS.Background = LSX.Foreground;
+                Sign_DPad_U.Background = Bar_LeftStick_X.Foreground;
             }
             else
             {
-                UpS.Background = LSX.Background;
+                Sign_DPad_U.Background = Bar_LeftStick_X.Background;
             }
+
             if (this.gamePadState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                DownS.Background = LSX.Foreground;
+                Sign_DPad_D.Background = Bar_LeftStick_X.Foreground;
             }
             else
             {
-                DownS.Background = LSX.Background;
-            }
-            if (this.gamePadState.Buttons.BigButton == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
-            {
-                ShiitakeS.Background = LSX.Foreground;
-            }
-            else
-            {
-                ShiitakeS.Background = LSX.Background;
+                Sign_DPad_D.Background = Bar_LeftStick_X.Background;
             }
 
             if (this.gamePadState.Buttons.LeftShoulder == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                LBS.Background = LSX.Foreground;
+                Sign_Button_LB.Background = Bar_LeftStick_X.Foreground;
             }
             else
             {
-                LBS.Background = LSX.Background;
+                Sign_Button_LB.Background = Bar_LeftStick_X.Background;
             }
 
             if (Button_A)
             {
-                AS.Background = LSX.Foreground;
+                Sign_Button_RB.Background = Bar_LeftStick_X.Foreground;
             }
             else
             {
-                AS.Background = LSX.Background;
+                Sign_Button_RB.Background = Bar_LeftStick_X.Background;
             }
 
             if (Button_Y)
             {
-                YS.Background = LSX.Foreground;
+                Sign_Button_Y.Background = Bar_LeftStick_X.Foreground;
             }
             else
             {
-                YS.Background = LSX.Background;
+                Sign_Button_Y.Background = Bar_LeftStick_X.Background;
             }
 
             if (Button_Y)
@@ -332,20 +319,20 @@ namespace IMDeyes
                 switch (SelectedLabels)
                 {
                     case 0:
-                        AcceKp.Value = AcceKp.Value + DPadRange;
-                        AcceKp_Value.Text = AcceKp.Value.ToString();
+                        Bar_AcceKp.Value = Bar_AcceKp.Value + DPadRange;
+                        Label_AcceKp.Text = Bar_AcceKp.Value.ToString();
                         break;
                     case 1:
-                        AcceKd.Value = AcceKd.Value + DPadRange;
-                        AcceKd_Value.Text = AcceKd.Value.ToString();
+                        Bar_AcceKd.Value = Bar_AcceKd.Value + DPadRange;
+                        Label_AcceKd.Text = Bar_AcceKd.Value.ToString();
                         break;
                     case 2:
-                        GyroKp.Value = GyroKp.Value + DPadRange;
-                        GyroKp_Value.Text = GyroKp.Value.ToString();
+                        Bar_GyroKp.Value = Bar_GyroKp.Value + DPadRange;
+                        Label_GyroKp.Text = Bar_GyroKp.Value.ToString();
                         break;
                     case 3:
-                        GyroKd.Value = GyroKd.Value + DPadRange;
-                        GyroKd_Value.Text = GyroKd.Value.ToString();
+                        Bar_GyroKd.Value = Bar_GyroKd.Value + DPadRange;
+                        Label_GyroKd.Text = Bar_GyroKd.Value.ToString();
                         break;
                 }
             }
@@ -355,20 +342,20 @@ namespace IMDeyes
                 switch (SelectedLabels)
                 {
                     case 0:
-                        AcceKp.Value = AcceKp.Value - DPadRange;
-                        AcceKp_Value.Text = AcceKp.Value.ToString();
+                        Bar_AcceKp.Value = Bar_AcceKp.Value - DPadRange;
+                        Label_AcceKp.Text = Bar_AcceKp.Value.ToString();
                         break;
                     case 1:
-                        AcceKd.Value = AcceKd.Value - DPadRange;
-                        AcceKd_Value.Text = AcceKd.Value.ToString();
+                        Bar_AcceKd.Value = Bar_AcceKd.Value - DPadRange;
+                        Label_AcceKd.Text = Bar_AcceKd.Value.ToString();
                         break;
                     case 2:
-                        GyroKp.Value = GyroKp.Value - DPadRange;
-                        GyroKp_Value.Text = GyroKp.Value.ToString();
+                        Bar_GyroKp.Value = Bar_GyroKp.Value - DPadRange;
+                        Label_GyroKp.Text = Bar_GyroKp.Value.ToString();
                         break;
                     case 3:
-                        GyroKd.Value = GyroKd.Value - DPadRange;
-                        GyroKd_Value.Text = GyroKd.Value.ToString();
+                        Bar_GyroKd.Value = Bar_GyroKd.Value - DPadRange;
+                        Label_GyroKd.Text = Bar_GyroKd.Value.ToString();
                         break;
                 }
             }
@@ -389,23 +376,23 @@ namespace IMDeyes
                 switch (SelectedLabels)
                 {
                     case 0:
-                        GyroKd.BorderThickness = new Thickness(0, 0, 0, 0);
-                        AcceKp.BorderThickness = new Thickness(2, 2, 2, 2);
+                        Bar_GyroKd.BorderThickness = new Thickness(0, 0, 0, 0);
+                        Bar_AcceKp.BorderThickness = new Thickness(2, 2, 2, 2);
                         SelectLabel.Text = "AcceKp";
                         break;
                     case 1:
-                        AcceKp.BorderThickness = new Thickness(0, 0, 0, 0);
-                        AcceKd.BorderThickness = new Thickness(2, 2, 2, 2);
+                        Bar_AcceKp.BorderThickness = new Thickness(0, 0, 0, 0);
+                        Bar_AcceKd.BorderThickness = new Thickness(2, 2, 2, 2);
                         SelectLabel.Text = "AcceKd";
                         break;
                     case 2:
-                        AcceKd.BorderThickness = new Thickness(0, 0, 0, 0);
-                        GyroKp.BorderThickness = new Thickness(2, 2, 2, 2);
+                        Bar_AcceKd.BorderThickness = new Thickness(0, 0, 0, 0);
+                        Bar_GyroKp.BorderThickness = new Thickness(2, 2, 2, 2);
                         SelectLabel.Text = "GyroKp";
                         break;
                     case 3:
-                        GyroKp.BorderThickness = new Thickness(0, 0, 0, 0);
-                        GyroKd.BorderThickness = new Thickness(2, 2, 2, 2);
+                        Bar_GyroKp.BorderThickness = new Thickness(0, 0, 0, 0);
+                        Bar_GyroKd.BorderThickness = new Thickness(2, 2, 2, 2);
                         SelectLabel.Text = "GyroKd";
                         break;
                 }
@@ -419,98 +406,79 @@ namespace IMDeyes
 
             if (MValue.Length >= 4)
             {
-                ML.Value = MValue[0];
-                MR.Value = MValue[1];
-                MF.Value = MValue[2];
-                MB.Value = MValue[3];
-                MotoL_Value.Text = MValue[0].ToString();
-                MotoB_Value.Text = MValue[3].ToString();
-                MotoR_Value.Text = MValue[1].ToString();
-                MotoF_Value.Text = MValue[2].ToString();
+                Bar_Motor_L.Value = MValue[0];
+                Bar_Motor_R.Value = MValue[1];
+                Bar_Motor_F.Value = MValue[2];
+                Bar_Motor_B.Value = MValue[3];
+                Label_Motor_L.Text = MValue[0].ToString();
+                Label_Motor_B.Text = MValue[3].ToString();
+                Label_Motor_R.Text = MValue[1].ToString();
+                Label_Motor_F.Text = MValue[2].ToString();
                 MValue = new int[0];
             }
 
             if (AValue.Length >= 9)
             {
-                ACX.Value = AValue[0];
-                ACY.Value = AValue[1];
-                ACZ.Value = AValue[2];
-                GYX.Value = AValue[3];
-                GYY.Value = AValue[4];
-                GYZ.Value = AValue[5];
-                AGX.Value = AValue[6];
-                AGY.Value = AValue[7];
-                AGZ.Value = AValue[8];
+                Bar_Accel_X.Value = AValue[0];
+                Bar_Accel_Y.Value = AValue[1];
+                Bar_Accel_Z.Value = AValue[2];
+                Bar_Gyro_X.Value = AValue[3];
+                Bar_Gyro_Y.Value = AValue[4];
+                Bar_Gyro_Z.Value = AValue[5];
+                Bar_Angle_X.Value = AValue[6];
+                Bar_Angle_Y.Value = AValue[7];
 
                 GraphRefresh();
 
-                AcclX_Value.Text = AValue[0].ToString();
-                AcclY_Value.Text = AValue[1].ToString();
-                AcclZ_Value.Text = AValue[2].ToString();
-                GyroX_Value.Text = AValue[3].ToString();
-                GyroY_Value.Text = AValue[4].ToString();
-                GyroZ_Value.Text = AValue[5].ToString();
-                AngleX_Value.Text = AValue[6].ToString();
-                AngleY_Value.Text = AValue[7].ToString();
-                AngleZ_Value.Text = AValue[8].ToString();
+                Label_Accel_X.Text = AValue[0].ToString();
+                Label_Accel_Y.Text = AValue[1].ToString();
+                Label_Accel_Z.Text = AValue[2].ToString();
+                Label_Gyro_X.Text = AValue[3].ToString();
+                Label_Gyro_Y.Text = AValue[4].ToString();
+                Label_Gyro_Z.Text = AValue[5].ToString();
+                Label_Angle_X.Text = AValue[6].ToString();
+                Label_Angle_Y.Text = AValue[7].ToString();
                 AValue = new int[0];
             }
-            Button_Shiitake = this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
+            Button_Start = this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             Send = "q" // initialize
                 + "a" + RightStick_Y.ToString("000") // unused.
                 + "b" + RightStick_X.ToString("000") // unused.
                 + "c" + LeftStick_Y.ToString("000") // handle x
                 + "d" + LeftStick_X.ToString("000") // handle y
-                + "e" + TT.ToString("000")   // throttle
+                + "e" + Trigger.ToString("000")   // throttle
                 + "f" + Convert.ToInt32(Button_A)  // enable switch
 
                 // debug for PD :)
-                + "h" + AcceKp.Value.ToString() // acce KP -
-                + "i" + AcceKd.Value.ToString() // acce KP +
-                + "j" + GyroKp.Value.ToString() // acce KD +
-                + "k" + GyroKd.Value.ToString() // acce KD -
+                + "h" + Bar_AcceKp.Value.ToString() // acce KP -
+                + "i" + Bar_AcceKd.Value.ToString() // acce KP +
+                + "j" + Bar_GyroKp.Value.ToString() // acce KD +
+                + "k" + Bar_GyroKd.Value.ToString() // acce KD -
                 + "r";
         }
 
         void GraphRefresh()
         {
-            try
-            {
-                ACLX.AppendAsync(Dispatcher, new System.Windows.Point(Frame, ACX.Value));
-                ACLY.AppendAsync(Dispatcher, new System.Windows.Point(Frame, ACY.Value));
-                ACLZ.AppendAsync(Dispatcher, new System.Windows.Point(Frame, ACZ.Value));
-                GYRX.AppendAsync(Dispatcher, new System.Windows.Point(Frame, GYX.Value));
-                GYRY.AppendAsync(Dispatcher, new System.Windows.Point(Frame, GYY.Value));
-                GYRZ.AppendAsync(Dispatcher, new System.Windows.Point(Frame, GYZ.Value));
-                ANGX.AppendAsync(Dispatcher, new System.Windows.Point(Frame, AGX.Value));
-                ANGY.AppendAsync(Dispatcher, new System.Windows.Point(Frame, AGY.Value));
-                ANGZ.AppendAsync(Dispatcher, new System.Windows.Point(Frame, AGZ.Value));
-                if (MR.Value != 18000)
-                {
-                    MOTOFRLB.AppendAsync(Dispatcher, new System.Windows.Point(MR.Value - ML.Value, MF.Value - MB.Value));
-                }
+                Point_Accel_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Accel_X.Value));
+                Point_Accel_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Accel_Y.Value));
+                Point_Accel_Z.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Accel_Z.Value));
+                Point_Gyro_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Gyro_X.Value));
+                Point_Gyro_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Gyro_Y.Value));
+                Point_Gyro_Z.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Gyro_Z.Value));
+                Point_Angle_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Angle_X.Value));
+                Point_Angle_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Angle_Y.Value));
                 if (Frame > 200)
                 {
-                    ACLX.Collection.Remove(ACLX.Collection.First());
-                    ACLY.Collection.Remove(ACLY.Collection.First());
-                    ACLZ.Collection.Remove(ACLZ.Collection.First());
-                    GYRX.Collection.Remove(GYRX.Collection.First());
-                    GYRY.Collection.Remove(GYRY.Collection.First());
-                    GYRZ.Collection.Remove(GYRZ.Collection.First());
-                    ANGX.Collection.Remove(ANGX.Collection.First());
-                    ANGY.Collection.Remove(ANGY.Collection.First());
-                    ANGZ.Collection.Remove(ANGZ.Collection.First());
-                }
-                if (Frame > 20)
-                {
-                    MOTOFRLB.Collection.Remove(MOTOFRLB.Collection.First());
+                    Point_Accel_X.Collection.Remove(Point_Accel_X.Collection.First());
+                    Point_Accel_Y.Collection.Remove(Point_Accel_Y.Collection.First());
+                    Point_Accel_Z.Collection.Remove(Point_Accel_Z.Collection.First());
+                    Point_Gyro_X.Collection.Remove(Point_Gyro_X.Collection.First());
+                    Point_Gyro_Y.Collection.Remove(Point_Gyro_Y.Collection.First());
+                    Point_Gyro_Z.Collection.Remove(Point_Gyro_Z.Collection.First());
+                    Point_Angle_X.Collection.Remove(Point_Angle_X.Collection.First());
+                    Point_Angle_Y.Collection.Remove(Point_Angle_Y.Collection.First());
                 }
                 Frame++;
-            }
-            catch (System.StackOverflowException overFlowExcept)
-            {
-                InfomationViewAdd("StackOverflow: " + overFlowExcept.Message);
-            }
         }
 
         string[] Moyashi = null;
@@ -529,8 +497,8 @@ namespace IMDeyes
                 {
                     if (Moyashi[0] == "A")
                     {
-                        AValue = new int[9];
-                        for (int i = 0; i < 9; i++)
+                        AValue = new int[8];
+                        for (int i = 0; i < 8; i++)
                         {
                             AValue[i] = int.Parse(Moyashi[i + 1]);
                         }
@@ -677,5 +645,11 @@ namespace IMDeyes
                 InfomationViewAdd("Port does not exist");
             }
         }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
     }
 }
