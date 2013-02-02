@@ -61,14 +61,14 @@ namespace IMDeyes
 
             ConnectPort = new SerialPort();
 
-            Moyashi = new string[13];
+            Moyashi = new string[12];
 
             Point_Accel_X = new ObservableDataSource<System.Windows.Point>();
             Point_Accel_X.SetXYMapping(point => point);
-            Plotter_Accel.AddLineGraph(Point_Accel_X, Colors.Blue, 1.0);
+            Plotter_Accel.AddLineGraph(Point_Accel_X, Colors.DarkTurquoise, 1.0);
             Point_Accel_Y = new ObservableDataSource<System.Windows.Point>();
             Point_Accel_Y.SetXYMapping(point => point);
-            Plotter_Accel.AddLineGraph(Point_Accel_Y, Colors.Green, 1.0);
+            Plotter_Accel.AddLineGraph(Point_Accel_Y, Colors.GreenYellow, 1.0);
             Point_Accel_Z = new ObservableDataSource<System.Windows.Point>();
             Point_Accel_Z.SetXYMapping(point => point);
             Plotter_Accel.AddLineGraph(Point_Accel_Z, Colors.Red, 1.0);
@@ -76,10 +76,10 @@ namespace IMDeyes
 
             Point_Gyro_X = new ObservableDataSource<System.Windows.Point>();
             Point_Gyro_X.SetXYMapping(point => point);
-            Plotter_Gyro.AddLineGraph(Point_Gyro_X, Colors.Blue, 1.0);
+            Plotter_Gyro.AddLineGraph(Point_Gyro_X, Colors.DarkTurquoise, 1.0);
             Point_Gyro_Y = new ObservableDataSource<System.Windows.Point>();
             Point_Gyro_Y.SetXYMapping(point => point);
-            Plotter_Gyro.AddLineGraph(Point_Gyro_Y, Colors.Green, 1.0);
+            Plotter_Gyro.AddLineGraph(Point_Gyro_Y, Colors.GreenYellow, 1.0);
             Point_Gyro_Z = new ObservableDataSource<System.Windows.Point>();
             Point_Gyro_Z.SetXYMapping(point => point);
             Plotter_Gyro.AddLineGraph(Point_Gyro_Z, Colors.Red, 1.0);
@@ -87,10 +87,10 @@ namespace IMDeyes
 
             Point_Angle_X = new ObservableDataSource<System.Windows.Point>();
             Point_Angle_X.SetXYMapping(point => point);
-            Plotter_Angle.AddLineGraph(Point_Angle_X, Colors.Blue, 1.0);
+            Plotter_Angle.AddLineGraph(Point_Angle_X, Colors.DarkTurquoise, 1.0);
             Point_Angle_Y = new ObservableDataSource<System.Windows.Point>();
             Point_Angle_Y.SetXYMapping(point => point);
-            Plotter_Angle.AddLineGraph(Point_Angle_Y, Colors.Green, 1.0);
+            Plotter_Angle.AddLineGraph(Point_Angle_Y, Colors.GreenYellow, 1.0);
             Plotter_Angle.Legend.Remove();
 
             Bar_AcceKp.Value = 4.0 / 4 * 10;
@@ -134,7 +134,7 @@ namespace IMDeyes
             }
             catch (Exception ex)
             {
-                ChangeUnder(3, "Write Failed: " + ex.Message);
+                ChangeUnder(3, "Write Failed:" + ex.Message);
             }
         }
 
@@ -145,16 +145,13 @@ namespace IMDeyes
                 try
                 {
                     ConnectPort.Write(Send);
-                    writer.WriteLine("SEND:" + Send);
+                    writer.WriteLine("Send:" + Send);
                     SerialViewAdd(Send);
                 }
                 catch (TimeoutException)
                 {
-                    if (ConnectPort.IsOpen)
-                    {
-                        ChangeUnder(3, "Send Timeout");
-                        DisConnect();
-                    }
+                    ChangeUnder(3, "Send Timeout");
+                    DisConnect();
                 }
                 catch (Exception ex)
                 {
@@ -197,6 +194,21 @@ namespace IMDeyes
             }));
         }
 
+        void InfomationViewAdd(string hoge)
+        {
+            Dispatcher.BeginInvoke((Action)(() =>
+            {
+                if ((bool)InfomationViewEnable.IsChecked)
+                {
+                    InfomationView.Items.Insert(0, hoge);
+                    if (InfomationView.Items.Count > 300)
+                    {
+                        InfomationView.Items.RemoveAt(299);
+                    }
+                }
+            }));
+        }
+
 
         string Send;
 
@@ -228,8 +240,11 @@ namespace IMDeyes
 
             if (!Button_Start && this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-                connect = new Thread(new ThreadStart(TryToConnectAsync));
-                connect.Start();
+                if (ConnectButton.IsEnabled)
+                {
+                    connect = new Thread(new ThreadStart(TryToConnectAsync));
+                    connect.Start();
+                }
             }
 
             if (this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
@@ -399,7 +414,7 @@ namespace IMDeyes
                 MValue = new int[0];
             }
 
-            if (AValue.Length >= 9)
+            if (AValue.Length >= 8)
             {
                 Bar_Accel_X.Value = AValue[0];
                 Bar_Accel_Y.Value = AValue[1];
@@ -449,7 +464,8 @@ namespace IMDeyes
                 Point_Gyro_Z.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Gyro_Z.Value));
                 Point_Angle_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Angle_X.Value));
                 Point_Angle_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Angle_Y.Value));
-                if (Frame > 200)
+
+                if (Frame >100)
                 {
                     Point_Accel_X.Collection.Remove(Point_Accel_X.Collection.First());
                     Point_Accel_Y.Collection.Remove(Point_Accel_Y.Collection.First());
@@ -487,7 +503,7 @@ namespace IMDeyes
                     }
                     else if (Moyashi[0] == "M")
                     {
-                        MValue = new int[13];
+                        MValue = new int[12];
                         for (int i = 0; i < 4; i++)
                         {
                             MValue[i] = int.Parse(Moyashi[i + 1]);
@@ -496,13 +512,20 @@ namespace IMDeyes
                 }
                 catch
                 {
-                    ChangeUnder(3,"Edit error\r\n" + ReceiveData);
+                    ChangeUnder(3,"Edit error:" + ReceiveData);
                 }
 
             }
             else
             {
-                ChangeUnder(3,"KUFC \r\n" + ReceiveData);
+                if (!ReceiveData.Contains("[INFO]"))
+                {
+                    ChangeUnder(3, "KUFC:" + ReceiveData);
+                }
+                else
+                {
+                    InfomationViewAdd(ReceiveData);
+                }
             }
         }
 
@@ -521,17 +544,14 @@ namespace IMDeyes
                 }
                 catch (TimeoutException)
                 {
-                    if (ConnectPort.IsOpen)
-                    {
-                        ChangeUnder(3,"Receive Timeout");
-                        DisConnect();
-                    }
+                    ChangeUnder(3,"Receive Timeout");
+                    DisConnect();
                 }
                 catch (Exception ex)
                 {
                     Dispatcher.BeginInvoke((Action)(() =>
                     {
-                        ChangeUnder(3, "Receive error: \r\n " + ex.Message);
+                        ChangeUnder(3, "Receive error:" + ex.Message);
                     }));
                 }
             }
@@ -539,19 +559,22 @@ namespace IMDeyes
 
         private void TryToConnect(object sender, RoutedEventArgs e)
         {
-            connect = new Thread(new ThreadStart(TryToConnectAsync));
-            connect.Start();
+            if (ConnectButton.IsEnabled)
+            {
+                connect = new Thread(new ThreadStart(TryToConnectAsync));
+                connect.Start();
+            }
         }
         void TryToConnectAsync()
         {
-            if (ConnectPort.IsOpen)
-            {
-                DisConnect();
-            }
-            else if (!ConnectPort.IsOpen)
-            {
-                Connect();
-            }
+                if (ConnectPort.IsOpen)
+                {
+                    DisConnect();
+                }
+                else if (!ConnectPort.IsOpen)
+                {
+                    Connect();
+                }
         }
 
         void DisConnect()
@@ -561,13 +584,13 @@ namespace IMDeyes
                 ConnectPort.Close();
                 Dispatcher.BeginInvoke((Action)(() =>
                 {
-                    ChangeUnder(1, "DisConnected");
+                    ChangeUnder(2, "DisConnected");
                     ConnectButton.Content = "Connect";
                 }));
             }
             catch (Exception ex)
             {
-                ChangeUnder(3, "Failed:" + ex.Message);
+                ChangeUnder(3, "DisConnect Failed:" + ex.Message);
             }
         }
         void Connect()
@@ -590,7 +613,7 @@ namespace IMDeyes
                         ConnectButton.IsEnabled = false;
                     })); ;
                     ConnectPort.Open();
-                    ChangeUnder(2, "Connection established");
+                    ChangeUnder(1, "Connection established");
 
                     Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
 
@@ -603,7 +626,7 @@ namespace IMDeyes
                         DateTime.Now.Second.ToString()
                             + ".txt", true, sjisEnc);
 
-                    writer.WriteLine("CONNECTED " + ConnectPort.PortName + " " + ConnectPort.BaudRate.ToString());
+                    writer.WriteLine("Connected:" + ConnectPort.PortName + ":" + ConnectPort.BaudRate.ToString());
 
                     Dispatcher.BeginInvoke((Action)(() =>
                     {

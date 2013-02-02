@@ -2,19 +2,20 @@
         Title="IMDeyes" Height="700" Width="1100" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Background="#00F0F0F0" Foreground="White" AllowsTransparency="True" WindowStyle="None">
     <Border x:Name="WindowBoader" BorderBrush="#FFA007A0" Background="#FF2D2D30"
             BorderThickness="1" Margin="10">
-        <Grid Margin="1,30,-1,20">
+        <Grid Margin="0,30,0,20">
     	<Grid.RowDefinitions>
-    		<RowDefinition Height="193*"/>
-                <RowDefinition Height="55*"/>
+    		<RowDefinition Height="165*"/>
+                <RowDefinition Height="83*"/>
                 <RowDefinition Height="149*"/>
     		<RowDefinition Height="109*"/>
     		<RowDefinition Height="122*"/>
     	</Grid.RowDefinitions>
     	<Grid.ColumnDefinitions>
     		<ColumnDefinition Width="99*"/>
-    		<ColumnDefinition Width="303*"/>
-    		<ColumnDefinition Width="236*"/>
-    		<ColumnDefinition Width="146*"/>
+    		<ColumnDefinition Width="254*"/>
+    		<ColumnDefinition Width="216*"/>
+                <ColumnDefinition Width="69*"/>
+                <ColumnDefinition Width="146*"/>
     		<ColumnDefinition Width="152*"/>
                 <ColumnDefinition Width="142*"/>
             </Grid.ColumnDefinitions>
@@ -49,15 +50,17 @@
     		<TextBlock Background="#7FA1A1A1" FontSize="22" Margin="4" x:Name="Sign_DPad_D" TextAlignment="Center" Grid.Row="6" Foreground="White" Grid.Column="1" Grid.ColumnSpan="2" ><Run Language="ja-jp" Text="▼"/></TextBlock>
     		<TextBlock Background="#7FA1A1A1" FontSize="18" Margin="4" x:Name="Sign_Button_Start" TextAlignment="Center" Grid.Row="6" Foreground="White" ><Run Language="ja-jp" Text="START"/></TextBlock>
         </Grid>
-            <Grid Margin="4" Grid.Column="5" Background="#7FA1A1A1" Grid.Row="1">
+            <Grid Margin="4" Grid.Column="6" Background="#7FA1A1A1" Grid.Row="1">
     		<Grid.RowDefinitions>
     			<RowDefinition/>
     			<RowDefinition/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-    		<CheckBox x:Name="SerialViewEnable" Content="SerialView:" Foreground="White" IsChecked="True" Margin="4" Grid.Row="1"/>
-    		<CheckBox x:Name="ReceiveViewEnable" Content="ReceiveView:" Foreground="White" IsChecked="True" Margin="4"/>
+    		<CheckBox x:Name="SerialViewEnable" Content="SerialView" Foreground="White" IsChecked="True" Margin="4" Grid.Row="1"/>
+    		<CheckBox x:Name="ReceiveViewEnable" Content="ReceiveView" Foreground="White" IsChecked="True" Margin="4"/>
+                <CheckBox x:Name="InfomationViewEnable" Content="InfomationView" Foreground="White" IsChecked="True" Margin="4" Grid.Row="2"/>
             </Grid>
-    	<Grid Grid.Column="5" Margin="0">
+    	<Grid Grid.Column="6" Margin="0">
     		<Grid.RowDefinitions>
     			<RowDefinition/>
     			<RowDefinition/>
@@ -77,10 +80,10 @@
     		<TextBlock x:Name="Label_Motor_R" Height="16.5" Margin="4,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" TextAlignment="Center" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="1" Text="18000"/>
     		<TextBlock x:Name="Label_Motor_L" Height="16.5" Margin="4,0" TextWrapping="Wrap" VerticalAlignment="Top" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="2" Grid.Row="1" Text="18000"/>
     		</Grid>
-            <Grid x:Name="Grid_Under" Grid.ColumnSpan="6" Margin="0,0,0,-20" Grid.Row="4" VerticalAlignment="Bottom" Background="#FFA007A0" Height="20">
-                <TextBlock x:Name="Label_Under" Margin="10,2,0,4" TextWrapping="Wrap" VerticalAlignment="Center"><Run Language="ja-jp" Text="Component Initialized."/></TextBlock>
+            <Grid x:Name="Grid_Under" Grid.ColumnSpan="7" Margin="0,0,0,-20" Grid.Row="4" VerticalAlignment="Bottom" Background="#FFA007A0" Height="20">
+                <TextBlock x:Name="Label_Under" Margin="10,2,0,0" TextWrapping="Wrap"><Run Language="ja-jp" Text="Component Initialized."/></TextBlock>
             </Grid>
-            <Grid Grid.ColumnSpan="6" Margin="0,-30,0,0" VerticalAlignment="Top" Background="#00A007A0" Height="30">
+            <Grid Grid.ColumnSpan="7" Margin="0,-30,0,0" VerticalAlignment="Top" Background="#00A007A0" Height="30">
                 <TextBlock HorizontalAlignment="Left" Margin="10,5,0,4" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#FF999999" FontSize="16" Width="358"><Run Language="ja-jp" Text="IMDeyes  -  moyashies"/></TextBlock>
                 <Button Content="r" Height="30" VerticalAlignment="Top" FontFamily="Marlett" HorizontalAlignment="Right" Width="30" BorderThickness="0" Background="#00DDDDDD" Foreground="#FFBFBFBF" Click="Exit" FontSize="14">
                     <Button.BorderBrush>
@@ -88,7 +91,7 @@
                     </Button.BorderBrush>
                 </Button>
             </Grid>
-            <Grid Grid.ColumnSpan="4" Grid.Column="2" HorizontalAlignment="Right" Width="537" Grid.RowSpan="3" Grid.Row="2" Margin="0">
+            <Grid Grid.ColumnSpan="4" Grid.Column="3" Grid.RowSpan="3" Grid.Row="2" Margin="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="169*"/>
@@ -105,6 +108,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid Margin="4" ToolTip="4" Background="#7FA1A1A1" Grid.Row="8" Grid.ColumnSpan="2"/>
                 <ProgressBar Margin="4" x:Name="Bar_Accel_X" BorderBrush="#00000000" Foreground="#FF49C8F0" Background="#7FA1A1A1" Maximum="256" BorderThickness="0" Minimum="-256" Grid.ColumnSpan="2" />
                 <ProgressBar BorderBrush="#00000000" Foreground="#FF49C8F0" Margin="4" x:Name="Bar_Accel_Y" Background="#7FA1A1A1" RenderTransformOrigin="0.5,0.5" Maximum="256" BorderThickness="0" Minimum="-256" Grid.Row="1" Grid.ColumnSpan="2" />
                 <ProgressBar BorderBrush="#00000000" Foreground="#FF49C8F0" Margin="4" x:Name="Bar_Accel_Z" Background="#7FA1A1A1" Maximum="256" BorderThickness="0" Minimum="-256" Grid.Row="2" Grid.ColumnSpan="2" />
@@ -120,23 +124,22 @@
                 <TextBlock x:Name="Label_Gyro_Y" Margin="0,13,0,14" TextWrapping="Wrap" Foreground="White" Grid.Row="4" VerticalAlignment="Center" TextAlignment="Center" Height="16"><Run Language="ja-jp" Text=""/></TextBlock>
                 <TextBlock x:Name="Label_Gyro_Z" Margin="0,13" TextWrapping="Wrap" Foreground="White" Grid.Row="5" VerticalAlignment="Center" TextAlignment="Center" Height="16"><Run Language="ja-jp" Text=""/></TextBlock>
                 <TextBlock x:Name="Label_Angle_X" Margin="0,13,0,14" TextWrapping="Wrap" Foreground="White" Grid.Row="6" TextAlignment="Center" VerticalAlignment="Center" Height="16"><Run Language="ja-jp" Text=""/></TextBlock>
-                <TextBlock x:Name="Label_Angle_Y" Margin="0,12,0,17" TextWrapping="Wrap" Foreground="White" Grid.Row="8" TextAlignment="Center" VerticalAlignment="Center" Height="14"><Run Language="ja-jp" Text=""/></TextBlock>
+                <TextBlock x:Name="Label_Angle_Y" Margin="0" TextWrapping="Wrap" Foreground="White" Grid.Row="7" TextAlignment="Center" VerticalAlignment="Center" Height="14"><Run Language="ja-jp" Text=""/></TextBlock>
                 <d3:ChartPlotter Margin="4,4,4,4" Grid.RowSpan="3" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="Plotter_Accel" Background="#7FA1A1A1" IsManipulationEnabled="False" BorderBrush="#FF49C8F0" Foreground="White" Grid.Column="2" />
                 <d3:ChartPlotter Margin="4" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="Plotter_Angle" Background="#7FA1A1A1" IsManipulationEnabled="False" BorderBrush="#FF0BDE69" Foreground="White" Grid.Column="2" Grid.Row="6" Grid.RowSpan="3" />
                 <d3:ChartPlotter Margin="4,4,4,4" Grid.RowSpan="3" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="Plotter_Gyro" Background="#7FA1A1A1" IsManipulationEnabled="False" Grid.Column="2" BorderBrush="#FFFF5966" Foreground="White" Grid.Row="3" />
-                <Grid Margin="4" ToolTip="4" Background="#7FA1A1A1" Grid.Row="8" Grid.ColumnSpan="2"/>
             </Grid>
-            <Grid Grid.Column="2" Margin="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <Grid Grid.Column="2" Margin="0" Grid.ColumnSpan="3" Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="183*"/>
                     <RowDefinition Height="65*"/>
                 </Grid.RowDefinitions>
                 <ListBox x:Name="ReceiveView"
-            		Margin="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" IsEnabled="True" Foreground="#FF474747" />
+            		Margin="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" IsEnabled="True" Foreground="White" BorderBrush="Transparent" />
                 <ListBox x:Name="SerialView"
                 	Margin="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" Foreground="White" Grid.Row="1" />
             </Grid>
-            <Grid Grid.Column="4" Margin="0" Grid.RowSpan="2">
+            <Grid Grid.Column="5" Margin="0" Grid.RowSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -152,6 +155,10 @@
                 <TextBlock x:Name="Label_AcceKd" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Grid.Column="1"><Run Language="ja-jp" Text="12"/></TextBlock>
                 <TextBlock x:Name="Label_AcceKp" Height="16" Margin="0,0,0,4" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" TextAlignment="Center"><Run Language="ja-jp" Text="20"/></TextBlock>
                 <TextBlock x:Name="SelectLabel" Height="16" Margin="0,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" Grid.ColumnSpan="2" Grid.Column="1"><Run Language="ja-jp" Text="AcceKp"/></TextBlock>
+            </Grid>
+            <Grid Grid.Column="2" Margin="0" Grid.Row="2" Grid.RowSpan="3">
+                <ListBox x:Name="InfomationView"
+            		Margin="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" IsEnabled="True" Foreground="White" BorderBrush="Transparent" />
             </Grid>
         </Grid>
     </Border>
