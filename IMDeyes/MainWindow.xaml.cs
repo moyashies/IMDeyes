@@ -221,9 +221,11 @@ namespace IMDeyes
             Button_X = this.gamePadState.Buttons.X == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             Button_Y = this.gamePadState.Buttons.Y == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
 
+            Label();
+
             if (this.gamePadState.Buttons.A == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
             {
-
+                LabelRefresh();
             }
 
             if (!Button_Start && this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
@@ -288,6 +290,8 @@ namespace IMDeyes
             {
                 Sign_Button_Y.Background = Bar_LeftStick_X.Background;
             }
+
+            
 
             DPad_L = this.gamePadState.DPad.Left == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             DPad_D = this.gamePadState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
@@ -585,12 +589,50 @@ namespace IMDeyes
 
         private void Refresh(object sender, RoutedEventArgs e)
         {
+            LabelRefresh();
+        }
+        void LabelRefresh()
+        {
             Label_AngleKp.Text = Box_AngleKp.Text;
             Label_AngleKd.Text = Box_AngleKd.Text;
             Label_GyroKp.Text = Box_GyroKp.Text;
             Label_GyroKd.Text = Box_GyroKd.Text;
             Label_AngleGain.Text = Box_AngleGain.Text;
             Label_GyroGain.Text = Box_GyroGain.Text;
+        }
+
+        private void Label()
+        {
+            Box_AngleKp.Background = Brushes.White;
+            Box_AngleKd.Background = Brushes.White;
+            Box_GyroKp.Background = Brushes.White;
+            Box_GyroKd.Background = Brushes.White;
+            Box_AngleGain.Background = Brushes.White;
+            Box_GyroGain.Background = Brushes.White;
+            if (Label_AngleKp.Text != Box_AngleKp.Text)
+            {
+                Box_AngleKp.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_AngleKd.Text != Box_AngleKd.Text)
+            {
+                Box_AngleKd.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_GyroKp.Text != Box_GyroKp.Text)
+            {
+                Box_GyroKp.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_GyroKd.Text != Box_GyroKd.Text)
+            {
+                Box_GyroKd.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_AngleGain.Text != Box_AngleGain.Text)
+            {
+                Box_AngleGain.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_GyroGain.Text != Box_GyroGain.Text)
+            {
+                Box_GyroGain.Background = Brushes.CornflowerBlue;
+            }
         }
 
         static double deg2rad(double deg)
