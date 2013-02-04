@@ -94,8 +94,8 @@
             <Grid Grid.ColumnSpan="4" Grid.Column="3" Grid.RowSpan="3" Grid.Row="2" Margin="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="169*"/>
-                    <ColumnDefinition Width="318*"/>
+                    <ColumnDefinition Width="55*"/>
+                    <ColumnDefinition Width="98*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -124,7 +124,7 @@
                 <TextBlock x:Name="Label_Gyro_Y" Margin="0,13,0,14" TextWrapping="Wrap" Foreground="White" Grid.Row="4" VerticalAlignment="Center" TextAlignment="Center" Height="16"><Run Language="ja-jp" Text=""/></TextBlock>
                 <TextBlock x:Name="Label_Gyro_Z" Margin="0,13" TextWrapping="Wrap" Foreground="White" Grid.Row="5" VerticalAlignment="Center" TextAlignment="Center" Height="16"><Run Language="ja-jp" Text=""/></TextBlock>
                 <TextBlock x:Name="Label_Angle_X" Margin="0,13,0,14" TextWrapping="Wrap" Foreground="White" Grid.Row="6" TextAlignment="Center" VerticalAlignment="Center" Height="16"><Run Language="ja-jp" Text=""/></TextBlock>
-                <TextBlock x:Name="Label_Angle_Y" Margin="0" TextWrapping="Wrap" Foreground="White" Grid.Row="7" TextAlignment="Center" VerticalAlignment="Center" Height="14"><Run Language="ja-jp" Text=""/></TextBlock>
+                <TextBlock x:Name="Label_Angle_Y" Margin="0,14" TextWrapping="Wrap" Foreground="White" Grid.Row="7" TextAlignment="Center" VerticalAlignment="Center" Height="14"><Run Language="ja-jp" Text=""/></TextBlock>
                 <d3:ChartPlotter Margin="4,4,4,4" Grid.RowSpan="3" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="Plotter_Accel" Background="#7FA1A1A1" IsManipulationEnabled="False" BorderBrush="#FF49C8F0" Foreground="White" Grid.Column="2" />
                 <d3:ChartPlotter Margin="4" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="Plotter_Angle" Background="#7FA1A1A1" IsManipulationEnabled="False" BorderBrush="#FF0BDE69" Foreground="White" Grid.Column="2" Grid.Row="6" Grid.RowSpan="3" />
                 <d3:ChartPlotter Margin="4,4,4,4" Grid.RowSpan="3" FlowDirection="LeftToRight" HorizontalContentAlignment="Left" SnapsToDevicePixels="False" LegendVisible="False" x:Name="Plotter_Gyro" Background="#7FA1A1A1" IsManipulationEnabled="False" Grid.Column="2" BorderBrush="#FFFF5966" Foreground="White" Grid.Row="3" />
@@ -139,26 +139,92 @@
                 <ListBox x:Name="SerialView"
                 	Margin="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" Foreground="White" Grid.Row="1" />
             </Grid>
-            <Grid Grid.Column="5" Margin="0" Grid.RowSpan="2">
+            <Grid Grid.Column="5" Margin="4" Grid.RowSpan="2" Background="#7FA1A1A1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Margin="4" Value="10" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="0" x:Name="Bar_GyroKd" Background="#7FA1A1A1" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" Grid.Column="3" />
-                <ProgressBar Margin="4" Value="7" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="0" x:Name="Bar_GyroKp" Background="#7FA1A1A1" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" Grid.Column="2" />
-                <ProgressBar Margin="4" Value="12" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="0" x:Name="Bar_AcceKd" Background="#7FA1A1A1" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" Grid.Column="1" />
-                <ProgressBar Margin="4" Value="20" Orientation="Vertical" Foreground="#FFFD8D4C" BorderThickness="2" x:Name="Bar_AcceKp" Background="#7FA1A1A1" Minimum="0" BorderBrush="#FF34FFE8" Maximum="200" />
-                <TextBlock x:Name="Label_GyroKd" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Grid.Column="3" Margin="0,0,0,4" TextAlignment="Center" Text="10"/>
-                <TextBlock x:Name="Label_GyroKp" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Text="7" Grid.Column="2"/>
-                <TextBlock x:Name="Label_AcceKd" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Grid.Column="1"><Run Language="ja-jp" Text="12"/></TextBlock>
-                <TextBlock x:Name="Label_AcceKp" Height="16" Margin="0,0,0,4" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" TextAlignment="Center"><Run Language="ja-jp" Text="20"/></TextBlock>
-                <TextBlock x:Name="SelectLabel" Height="16" Margin="0,9,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Center" Foreground="White" Grid.ColumnSpan="2" Grid.Column="1"><Run Language="ja-jp" Text="AcceKp"/></TextBlock>
+                <TextBlock x:Name="Label_GyroKd" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Text="10" Grid.Row="3"/>
+                <TextBlock x:Name="Label_GyroKp" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Text="7" Grid.Row="2"/>
+                <TextBlock x:Name="Label_AngleKd" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Grid.Row="1" Text="12"/>
+                <TextBlock x:Name="Label_AngleKp" Height="16" Margin="0,0,0,4" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" TextAlignment="Center" Text="20"/>
+                <TextBlock x:Name="Label_AngleGain" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Text="10" Grid.Row="4"/>
+                <TextBlock x:Name="Label_GyroGain" Height="17" TextWrapping="Wrap" VerticalAlignment="Bottom" Foreground="White" Margin="0,0,0,4" TextAlignment="Center" Text="10" Grid.Row="5"/>
+                <TextBox x:Name="Box_AngleKp" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Right" Height="16" Margin="0,15,4,4" TextWrapping="Wrap" Text="20" VerticalAlignment="Bottom" Width="104"/>
+                <TextBox x:Name="Box_AngleKd" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Right" Height="16" Margin="0,15,4,4" TextWrapping="Wrap" Text="12" VerticalAlignment="Bottom" Width="104" Grid.Row="1"/>
+                <TextBox x:Name="Box_GyroKp" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Right" Height="16" Margin="0,16,4,4" TextWrapping="Wrap" Text="7" VerticalAlignment="Bottom" Width="104" Grid.Row="2"/>
+                <TextBox x:Name="Box_GyroKd" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Right" Height="16" Margin="0,15,4,4" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="104" Grid.Row="3"/>
+                <TextBox x:Name="Box_AngleGain" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Right" Height="16" Margin="0,16,4,4" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="104" Grid.Row="4"/>
+                <TextBox x:Name="Box_GyroGain" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Right" Height="16" Margin="0,13,4,4" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" Width="104" Grid.Row="5"/>
+                <TextBlock Margin="4,0" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="3" Height="16" VerticalAlignment="Top" Grid.Row="1" Text="Angle Kd"/>
+                <TextBlock Margin="4,0" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="3" Height="16" VerticalAlignment="Top" Grid.Row="2"><Run Language="ja-jp" Text="Gyro Kp"/></TextBlock>
+                <TextBlock Margin="4,0" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="3" Height="16" VerticalAlignment="Top" Grid.Row="3"><Run Language="ja-jp" Text="Gyro Kd"/></TextBlock>
+                <TextBlock Margin="4,0" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="3" Height="16" VerticalAlignment="Top" Grid.Row="4"><Run Language="ja-jp" Text="Angle Gain"/></TextBlock>
+                <TextBlock Margin="4,0" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="3" Height="16" VerticalAlignment="Top" Grid.Row="5"><Run Language="ja-jp" Text="Gyro Gain"/></TextBlock>
+                <Button Content="a" Height="20" VerticalAlignment="Top" FontFamily="Marlett" BorderThickness="0" Background="#00DDDDDD" Foreground="White" Click="Refresh" FontSize="18" Margin="0" Grid.Column="3">
+                    <Button.BorderBrush>
+                        <SolidColorBrush Color="#FF707070" Opacity="0.5"/>
+                    </Button.BorderBrush>
+                </Button>
+                <TextBlock Margin="4,0,4,25" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" Grid.ColumnSpan="3" VerticalAlignment="Top"><Run Language="ja-jp" Text="Angle Kp"/></TextBlock>
             </Grid>
             <Grid Grid.Column="2" Margin="0" Grid.Row="2" Grid.RowSpan="3">
                 <ListBox x:Name="InfomationView"
             		Margin="4" Background="#7FA1A1A1" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" VerticalContentAlignment="Bottom" ScrollViewer.CanContentScroll="True" IsEnabled="True" Foreground="White" BorderBrush="Transparent" />
+            </Grid>
+            <Grid Grid.ColumnSpan="2" Margin="0" Grid.Row="2" Grid.RowSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="1" Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="Bar_Angle_F" Background="#7FA1A1A1" Maximum="1" BorderThickness="0" Minimum="-1" Grid.Column="1" Orientation="Vertical" />
+                </Grid>
+                <Grid Grid.Column="2" Margin="0" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="Bar_Angle_R" Background="#7FA1A1A1" Maximum="1" BorderThickness="0" Minimum="-1" Grid.Column="1" Orientation="Vertical" />
+                </Grid>
+                <Grid Grid.Column="1" Margin="0" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="Bar_Angle_B" Background="#7FA1A1A1" Maximum="1" BorderThickness="0" Minimum="-1" Grid.Column="1" Orientation="Vertical" />
+                </Grid>
+                <Grid Margin="0" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar BorderBrush="#00000000" Foreground="#FF0BDE69" Margin="4" x:Name="Bar_Angle_L" Background="#7FA1A1A1" Maximum="1" BorderThickness="0" Minimum="-1" Grid.Column="1" Orientation="Vertical" />
+                </Grid>
             </Grid>
         </Grid>
     </Border>

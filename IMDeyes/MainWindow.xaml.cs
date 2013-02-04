@@ -42,8 +42,6 @@ namespace IMDeyes
         GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
         StreamWriter writer;
 
-        int SelectedLabels = 0;
-
         Thread datas;
         Thread connect;
         Thread write;
@@ -93,14 +91,6 @@ namespace IMDeyes
             Plotter_Angle.AddLineGraph(Point_Angle_Y, Colors.GreenYellow, 1.0);
             Plotter_Angle.Legend.Remove();
 
-            Bar_AcceKp.Value = 4.0 / 4 * 10;
-            Bar_AcceKd.Value = 2.0 / 4 * 10;
-            Bar_GyroKp.Value = 12;
-            Bar_GyroKd.Value = 6.0 / 4 * 10;
-            Label_AcceKp.Text = Bar_AcceKp.Value.ToString();
-            Label_AcceKd.Text = Bar_AcceKd.Value.ToString();
-            Label_GyroKp.Text = Bar_GyroKp.Value.ToString();
-            Label_GyroKd.Text = Bar_GyroKd.Value.ToString();
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Interval = 30;
@@ -226,8 +216,6 @@ namespace IMDeyes
             Bar_RightStick_Y.Value = (float)RightStick_Y / 255 * 100;
             Bar_Trigger.Value = (float)Trigger / 255 * 100;
 
-            int DPadRange = 1;
-
             Button_A = this.gamePadState.Buttons.RightShoulder == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             Button_B = this.gamePadState.Buttons.B == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             Button_X = this.gamePadState.Buttons.X == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
@@ -301,100 +289,6 @@ namespace IMDeyes
                 Sign_Button_Y.Background = Bar_LeftStick_X.Background;
             }
 
-            if (Button_Y)
-            {
-                DPadRange = 10;
-            }
-            else
-            {
-                DPadRange = 1;
-            }
-
-            if (!DPad_U && this.gamePadState.DPad.Up == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
-            {
-
-                switch (SelectedLabels)
-                {
-                    case 0:
-                        Bar_AcceKp.Value = Bar_AcceKp.Value + DPadRange;
-                        Label_AcceKp.Text = Bar_AcceKp.Value.ToString();
-                        break;
-                    case 1:
-                        Bar_AcceKd.Value = Bar_AcceKd.Value + DPadRange;
-                        Label_AcceKd.Text = Bar_AcceKd.Value.ToString();
-                        break;
-                    case 2:
-                        Bar_GyroKp.Value = Bar_GyroKp.Value + DPadRange;
-                        Label_GyroKp.Text = Bar_GyroKp.Value.ToString();
-                        break;
-                    case 3:
-                        Bar_GyroKd.Value = Bar_GyroKd.Value + DPadRange;
-                        Label_GyroKd.Text = Bar_GyroKd.Value.ToString();
-                        break;
-                }
-            }
-
-            if (!DPad_D && this.gamePadState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
-            {
-                switch (SelectedLabels)
-                {
-                    case 0:
-                        Bar_AcceKp.Value = Bar_AcceKp.Value - DPadRange;
-                        Label_AcceKp.Text = Bar_AcceKp.Value.ToString();
-                        break;
-                    case 1:
-                        Bar_AcceKd.Value = Bar_AcceKd.Value - DPadRange;
-                        Label_AcceKd.Text = Bar_AcceKd.Value.ToString();
-                        break;
-                    case 2:
-                        Bar_GyroKp.Value = Bar_GyroKp.Value - DPadRange;
-                        Label_GyroKp.Text = Bar_GyroKp.Value.ToString();
-                        break;
-                    case 3:
-                        Bar_GyroKd.Value = Bar_GyroKd.Value - DPadRange;
-                        Label_GyroKd.Text = Bar_GyroKd.Value.ToString();
-                        break;
-                }
-            }
-
-
-
-            if (!Button_LB && this.gamePadState.Buttons.LeftShoulder == Microsoft.Xna.Framework.Input.ButtonState.Pressed)
-            {
-                if (SelectedLabels != 3)
-                {
-                    SelectedLabels++;
-                }
-                else
-                {
-                    SelectedLabels = 0;
-                }
-
-                switch (SelectedLabels)
-                {
-                    case 0:
-                        Bar_GyroKd.BorderThickness = new Thickness(0, 0, 0, 0);
-                        Bar_AcceKp.BorderThickness = new Thickness(2, 2, 2, 2);
-                        SelectLabel.Text = "AcceKp";
-                        break;
-                    case 1:
-                        Bar_AcceKp.BorderThickness = new Thickness(0, 0, 0, 0);
-                        Bar_AcceKd.BorderThickness = new Thickness(2, 2, 2, 2);
-                        SelectLabel.Text = "AcceKd";
-                        break;
-                    case 2:
-                        Bar_AcceKd.BorderThickness = new Thickness(0, 0, 0, 0);
-                        Bar_GyroKp.BorderThickness = new Thickness(2, 2, 2, 2);
-                        SelectLabel.Text = "GyroKp";
-                        break;
-                    case 3:
-                        Bar_GyroKp.BorderThickness = new Thickness(0, 0, 0, 0);
-                        Bar_GyroKd.BorderThickness = new Thickness(2, 2, 2, 2);
-                        SelectLabel.Text = "GyroKd";
-                        break;
-                }
-            }
-
             DPad_L = this.gamePadState.DPad.Left == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             DPad_D = this.gamePadState.DPad.Down == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             DPad_U = this.gamePadState.DPad.Up == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
@@ -424,6 +318,10 @@ namespace IMDeyes
                 Bar_Gyro_Z.Value = AValue[5];
                 Bar_Angle_X.Value = AValue[6];
                 Bar_Angle_Y.Value = AValue[7];
+                Bar_Angle_F.Value = Math.Sin(-1 * deg2rad(AValue[6]));
+                Bar_Angle_B.Value = Math.Sin(deg2rad(AValue[6]));
+                Bar_Angle_L.Value = Math.Sin(-1 * deg2rad(AValue[7]));
+                Bar_Angle_R.Value = Math.Sin(deg2rad(AValue[7]));
 
                 GraphRefresh();
 
@@ -447,10 +345,12 @@ namespace IMDeyes
                 + "f" + Convert.ToInt32(Button_A)  // enable switch
 
                 // debug for PD :)
-                + "h" + Bar_AcceKp.Value.ToString() // acce KP -
-                + "i" + Bar_AcceKd.Value.ToString() // acce KP +
-                + "j" + Bar_GyroKp.Value.ToString() // acce KD +
-                + "k" + Bar_GyroKd.Value.ToString() // acce KD -
+                + "h" + Label_AngleKp.Text
+                + "i" + Label_AngleKd.Text
+                + "j" + Label_GyroKp.Text
+                + "k" + Label_GyroKd.Text
+                + "l" + Label_AngleGain.Text
+                + "m" + Label_GyroGain.Text
                 + "r";
         }
 
@@ -681,6 +581,21 @@ namespace IMDeyes
                 }
                 Label_Under.Text = message;
             }));
+        }
+
+        private void Refresh(object sender, RoutedEventArgs e)
+        {
+            Label_AngleKp.Text = Box_AngleKp.Text;
+            Label_AngleKd.Text = Box_AngleKd.Text;
+            Label_GyroKp.Text = Box_GyroKp.Text;
+            Label_GyroKd.Text = Box_GyroKd.Text;
+            Label_AngleGain.Text = Box_AngleGain.Text;
+            Label_GyroGain.Text = Box_GyroGain.Text;
+        }
+
+        static double deg2rad(double deg)
+        {
+            return (deg / 180) * Math.PI;
         }
 
 
