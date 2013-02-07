@@ -49,7 +49,10 @@ namespace IMDeyes
         int Frame = 0;
 
         private ObservableDataSource<System.Windows.Point>
-            Point_Accel_X, Point_Accel_Y, Point_Accel_Z, Point_Gyro_X, Point_Gyro_Y, Point_Gyro_Z, Point_Angle_X, Point_Angle_Y;
+            Point_Accel_X, Point_Accel_Y, Point_Accel_Z, 
+                Point_Gyro_X, Point_Gyro_Y, Point_Gyro_Z, Point_Angle_X, Point_Angle_Y,
+                    Point_AnglePD_X,Point_AnglePD_Y,
+                        Point_GyroPD_X,Point_GyroPD_Y,Point_GyroPD_Z;
 
         public MainWindow()
         {
@@ -58,6 +61,30 @@ namespace IMDeyes
             this.MouseLeftButtonDown += (sender, e) => this.DragMove();
 
             ConnectPort = new SerialPort();
+
+            int[] Default = { 11, 4, 10, 6, 5, 4};
+            Box_AngleKp.Text = Default[0].ToString();
+            Box_AngleKd.Text = Default[1].ToString();
+            Box_GyroKp.Text = Default[2].ToString();
+            Box_GyroKd.Text = Default[3].ToString();
+            Box_AngleGain.Text = Default[4].ToString();
+            Box_GyroGain.Text = Default[5].ToString();
+            Label_AngleKp.Text = Box_AngleKp.Text;
+            Label_AngleKd.Text = Box_AngleKd.Text;
+            Label_GyroKp.Text = Box_GyroKp.Text;
+            Label_GyroKd.Text = Box_GyroKd.Text;
+            Label_AngleGain.Text = Box_AngleGain.Text;
+            Label_GyroGain.Text = Box_GyroGain.Text;
+
+            int[] MotorDefault = { 93, 87, 100, 90};
+            Box_Motor_L.Text = MotorDefault[0].ToString();
+            Box_Motor_R.Text = MotorDefault[1].ToString();
+            Box_Motor_F.Text = MotorDefault[2].ToString();
+            Box_Motor_B.Text = MotorDefault[3].ToString();
+            Label_MotorIn_L.Text = Box_Motor_L.Text;
+            Label_MotorIn_R.Text = Box_Motor_R.Text;
+            Label_MotorIn_F.Text = Box_Motor_F.Text;
+            Label_MotorIn_B.Text = Box_Motor_B.Text;
 
             Moyashi = new string[12];
 
@@ -90,6 +117,25 @@ namespace IMDeyes
             Point_Angle_Y.SetXYMapping(point => point);
             Plotter_Angle.AddLineGraph(Point_Angle_Y, Colors.GreenYellow, 1.0);
             Plotter_Angle.Legend.Remove();
+
+            Point_AnglePD_X = new ObservableDataSource<System.Windows.Point>();
+            Point_AnglePD_X.SetXYMapping(point => point);
+            Plotter_AnglePD.AddLineGraph(Point_AnglePD_X, Colors.DarkTurquoise, 1.0);
+            Point_AnglePD_Y = new ObservableDataSource<System.Windows.Point>();
+            Point_AnglePD_Y.SetXYMapping(point => point);
+            Plotter_AnglePD.AddLineGraph(Point_AnglePD_Y, Colors.Red, 1.0);
+            Plotter_AnglePD.Legend.Remove();
+
+            Point_GyroPD_X = new ObservableDataSource<System.Windows.Point>();
+            Point_GyroPD_X.SetXYMapping(point => point);
+            Plotter_GyroPD.AddLineGraph(Point_GyroPD_X, Colors.DarkTurquoise, 1.0);
+            Point_GyroPD_Y = new ObservableDataSource<System.Windows.Point>();
+            Point_GyroPD_Y.SetXYMapping(point => point);
+            Plotter_GyroPD.AddLineGraph(Point_GyroPD_Y, Colors.GreenYellow, 1.0);
+            Point_GyroPD_Z = new ObservableDataSource<System.Windows.Point>();
+            Point_GyroPD_Z.SetXYMapping(point => point);
+            Plotter_GyroPD.AddLineGraph(Point_GyroPD_Z, Colors.Red, 1.0);
+            Plotter_GyroPD.Legend.Remove();
 
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
@@ -135,7 +181,7 @@ namespace IMDeyes
                 try
                 {
                     ConnectPort.Write(Send);
-                    writer.WriteLine("Send:" + Send);
+                    writer.WriteLine("SEND:" + Send);
                     SerialViewAdd(Send);
                 }
                 catch (TimeoutException)
@@ -312,6 +358,26 @@ namespace IMDeyes
                 MValue = new int[0];
             }
 
+            if (GPValue.Length >= 3)
+            {
+                Bar_GyroPD_X.Value = GPValue[0];
+                Bar_GyroPD_Y.Value = GPValue[1];
+                Bar_GyroPD_Z.Value = GPValue[2];
+                Label_GyroPD_X.Text = GPValue[0].ToString();
+                Label_GyroPD_Y.Text = GPValue[1].ToString();
+                Label_GyroPD_Z.Text = GPValue[2].ToString();
+                GPValue = new int[0];
+            }
+
+            if (APValue.Length >= 2)
+            {
+                Bar_AnglePD_X.Value = APValue[0];
+                Bar_AnglePD_Y.Value = APValue[1];
+                Label_AnglePD_X.Text = APValue[0].ToString();
+                Label_AnglePD_Y.Text = APValue[1].ToString();
+                APValue = new int[0];
+            }
+
             if (AValue.Length >= 8)
             {
                 Bar_Accel_X.Value = AValue[0];
@@ -339,6 +405,7 @@ namespace IMDeyes
                 Label_Angle_Y.Text = AValue[7].ToString();
                 AValue = new int[0];
             }
+
             Button_Start = this.gamePadState.Buttons.Start == Microsoft.Xna.Framework.Input.ButtonState.Pressed;
             Send = "q" // initialize
                 + "a" + RightStick_Y.ToString("000") // unused.
@@ -349,17 +416,23 @@ namespace IMDeyes
                 + "f" + Convert.ToInt32(Button_A)  // enable switch
 
                 // debug for PD :)
-                + "h" + Label_AngleKp.Text
-                + "i" + Label_AngleKd.Text
-                + "j" + Label_GyroKp.Text
-                + "k" + Label_GyroKd.Text
-                + "l" + Label_AngleGain.Text
-                + "m" + Label_GyroGain.Text
+                + "g" + Label_AngleKp.Text
+                + "h" + Label_AngleKd.Text
+                + "i" + Label_GyroKp.Text
+                + "j" + Label_GyroKd.Text
+                + "k" + Label_AngleGain.Text
+                + "l" + Label_GyroGain.Text
+                + "m" + Label_MotorIn_L.Text
+                + "n" + Label_MotorIn_R.Text
+                + "o" + Label_MotorIn_F.Text
+                + "p" + Label_MotorIn_B.Text
                 + "r";
         }
 
         void GraphRefresh()
         {
+            if (PlotterSensor)
+            {
                 Point_Accel_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Accel_X.Value));
                 Point_Accel_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Accel_Y.Value));
                 Point_Accel_Z.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Accel_Z.Value));
@@ -368,17 +441,37 @@ namespace IMDeyes
                 Point_Gyro_Z.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Gyro_Z.Value));
                 Point_Angle_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Angle_X.Value));
                 Point_Angle_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_Angle_Y.Value));
+            }
+            if (PlotterPD)
+            {
+                Point_AnglePD_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_AnglePD_X.Value));
+                Point_AnglePD_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_AnglePD_Y.Value));
+                Point_GyroPD_X.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_GyroPD_X.Value));
+                Point_GyroPD_Y.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_GyroPD_Y.Value));
+                Point_GyroPD_Z.AppendAsync(Dispatcher, new System.Windows.Point(Frame, Bar_GyroPD_Z.Value));
+            }
 
                 if (Frame >100)
                 {
-                    Point_Accel_X.Collection.Remove(Point_Accel_X.Collection.First());
-                    Point_Accel_Y.Collection.Remove(Point_Accel_Y.Collection.First());
-                    Point_Accel_Z.Collection.Remove(Point_Accel_Z.Collection.First());
-                    Point_Gyro_X.Collection.Remove(Point_Gyro_X.Collection.First());
-                    Point_Gyro_Y.Collection.Remove(Point_Gyro_Y.Collection.First());
-                    Point_Gyro_Z.Collection.Remove(Point_Gyro_Z.Collection.First());
-                    Point_Angle_X.Collection.Remove(Point_Angle_X.Collection.First());
-                    Point_Angle_Y.Collection.Remove(Point_Angle_Y.Collection.First());
+                    if (PlotterSensor)
+                    {
+                        Point_Accel_X.Collection.Remove(Point_Accel_X.Collection.First());
+                        Point_Accel_Y.Collection.Remove(Point_Accel_Y.Collection.First());
+                        Point_Accel_Z.Collection.Remove(Point_Accel_Z.Collection.First());
+                        Point_Gyro_X.Collection.Remove(Point_Gyro_X.Collection.First());
+                        Point_Gyro_Y.Collection.Remove(Point_Gyro_Y.Collection.First());
+                        Point_Gyro_Z.Collection.Remove(Point_Gyro_Z.Collection.First());
+                        Point_Angle_X.Collection.Remove(Point_Angle_X.Collection.First());
+                        Point_Angle_Y.Collection.Remove(Point_Angle_Y.Collection.First());
+                    }
+                    if (PlotterPD)
+                    {
+                        Point_AnglePD_X.Collection.Remove(Point_AnglePD_X.Collection.First());
+                        Point_AnglePD_Y.Collection.Remove(Point_AnglePD_Y.Collection.First());
+                        Point_GyroPD_X.Collection.Remove(Point_GyroPD_X.Collection.First());
+                        Point_GyroPD_Y.Collection.Remove(Point_GyroPD_Y.Collection.First());
+                        Point_GyroPD_Z.Collection.Remove(Point_GyroPD_Z.Collection.First());
+                    }
                 }
                 Frame++;
         }
@@ -386,6 +479,8 @@ namespace IMDeyes
         string[] Moyashi = null;
         int[] AValue = new int[0];
         int[] MValue = new int[0];
+        int[] APValue = new int[0];
+        int[] GPValue = new int[0];
         string ReceiveData;
 
         private void DataEdit()
@@ -393,7 +488,7 @@ namespace IMDeyes
             Moyashi = ReceiveData.Split(',');
 
             ReceiveViewAdd(ReceiveData);
-            if (Moyashi.Length >= 5)
+            if (Moyashi.Length >= 2)
             {
                 try
                 {
@@ -407,11 +502,29 @@ namespace IMDeyes
                     }
                     else if (Moyashi[0] == "M")
                     {
-                        MValue = new int[12];
+                        MValue = new int[4];
                         for (int i = 0; i < 4; i++)
                         {
                             MValue[i] = int.Parse(Moyashi[i + 1]);
                         }
+                    }
+                    else if (Moyashi[0] == "AP")
+                    {
+                        APValue = new int[2];
+                        for (int i = 0; i < 2; i++)
+                        {
+                            APValue[i] = int.Parse(Moyashi[i + 1]);
+                        }
+                        InfomationViewAdd(ReceiveData);
+                    }
+                    else if (Moyashi[0] == "GP")
+                    {
+                        GPValue = new int[3];
+                        for (int i = 0; i < 3; i++)
+                        {
+                            GPValue[i] = int.Parse(Moyashi[i + 1]);
+                        }
+                        InfomationViewAdd(ReceiveData);
                     }
                 }
                 catch
@@ -422,14 +535,7 @@ namespace IMDeyes
             }
             else
             {
-                if (!ReceiveData.Contains("[INFO]"))
-                {
                     ChangeUnder(3, "KUFC:" + ReceiveData);
-                }
-                else
-                {
-                    InfomationViewAdd(ReceiveData);
-                }
             }
         }
 
@@ -599,6 +705,11 @@ namespace IMDeyes
             Label_GyroKd.Text = Box_GyroKd.Text;
             Label_AngleGain.Text = Box_AngleGain.Text;
             Label_GyroGain.Text = Box_GyroGain.Text;
+
+            Label_MotorIn_L.Text = Box_Motor_L.Text;
+            Label_MotorIn_R.Text = Box_Motor_R.Text;
+            Label_MotorIn_F.Text = Box_Motor_F.Text;
+            Label_MotorIn_B.Text = Box_Motor_B.Text;
         }
 
         private void Label()
@@ -609,6 +720,12 @@ namespace IMDeyes
             Box_GyroKd.Background = Brushes.White;
             Box_AngleGain.Background = Brushes.White;
             Box_GyroGain.Background = Brushes.White;
+
+            Box_Motor_L.Background = Brushes.White;
+            Box_Motor_R.Background = Brushes.White;
+            Box_Motor_F.Background = Brushes.White;
+            Box_Motor_B.Background = Brushes.White;
+
             if (Label_AngleKp.Text != Box_AngleKp.Text)
             {
                 Box_AngleKp.Background = Brushes.CornflowerBlue;
@@ -633,6 +750,22 @@ namespace IMDeyes
             {
                 Box_GyroGain.Background = Brushes.CornflowerBlue;
             }
+            if (Label_MotorIn_L.Text != Box_Motor_L.Text)
+            {
+                Box_Motor_L.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_MotorIn_R.Text != Box_Motor_R.Text)
+            {
+                Box_Motor_R.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_MotorIn_F.Text != Box_Motor_F.Text)
+            {
+                Box_Motor_F.Background = Brushes.CornflowerBlue;
+            }
+            if (Label_MotorIn_B.Text != Box_Motor_B.Text)
+            {
+                Box_Motor_B.Background = Brushes.CornflowerBlue;
+            }
         }
 
         static double deg2rad(double deg)
@@ -640,6 +773,19 @@ namespace IMDeyes
             return (deg / 180) * Math.PI;
         }
 
+        bool PlotterSensor = true;
+        bool PlotterPD = true;
 
+        private void PlotterSensorSwitch(object sender, RoutedEventArgs e)
+        {
+            PlotterSensor = !PlotterSensor;
+
+        }
+
+        private void PlotterPDSwitch(object sender, RoutedEventArgs e)
+        {
+            PlotterPD = !PlotterPD;
+
+        }
     }
 }
