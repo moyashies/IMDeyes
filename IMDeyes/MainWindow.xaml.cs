@@ -165,8 +165,7 @@ namespace IMDeyes
                 if (ConnectPort.IsOpen)
                 {
                     ChangeUnder(3,"Write Timeout");
-                    ConnectButton.Content = "Connect";
-              //      DisConnect();
+                    DisConnect();
                 }
             }
             catch (Exception ex)
@@ -188,8 +187,7 @@ namespace IMDeyes
                 catch (TimeoutException)
                 {
                     ChangeUnder(3, "Send Timeout");
-                    ConnectButton.Content = "Connect";
-           //         DisConnect();
+                    DisConnect();
                 }
                 catch (Exception ex)
                 {
@@ -484,14 +482,12 @@ namespace IMDeyes
         int[] APValue = new int[0];
         int[] GPValue = new int[0];
         string ReceiveData;
-        Stopwatch sw = new Stopwatch();
 
         private void DataEdit()
         {
             Moyashi = ReceiveData.Split(',');
 
             ReceiveViewAdd(ReceiveData);
-            
             if (Moyashi.Length >= 2)
             {
                 try
@@ -539,12 +535,7 @@ namespace IMDeyes
             }
             else
             {
-                if (ReceiveData.Contains("ZZZ"))
-                {
-                    InfomationViewAdd(sw.ElapsedMilliseconds.ToString());
-                    sw.Restart();
-                }
-                ChangeUnder(3, "KUFC:" + ReceiveData);
+                    ChangeUnder(3, "KUFC:" + ReceiveData);
             }
         }
 
@@ -564,8 +555,7 @@ namespace IMDeyes
                 catch (TimeoutException)
                 {
                     ChangeUnder(3,"Receive Timeout");
-                    ConnectButton.Content = "Connect";
-         //           DisConnect();
+                    DisConnect();
                 }
                 catch (Exception ex)
                 {
@@ -602,7 +592,6 @@ namespace IMDeyes
             try
             {
                 ConnectPort.Close();
-                sw.Stop();
                 Dispatcher.BeginInvoke((Action)(() =>
                 {
                     ChangeUnder(2, "DisConnected");
@@ -634,7 +623,6 @@ namespace IMDeyes
                         ConnectButton.IsEnabled = false;
                     })); ;
                     ConnectPort.Open();
-                    sw.Start();
                     ChangeUnder(1, "Connection established");
 
                     Encoding sjisEnc = Encoding.GetEncoding("Shift_JIS");
